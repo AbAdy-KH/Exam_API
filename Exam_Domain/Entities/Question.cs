@@ -18,6 +18,6 @@ namespace Exam_Domain.Entities
         public required string ExamId { get; set; }
         public Exam? Exam { get; set; }
 
-        public List<Options>? Options { get; set; }
+        public List<Option>? Options { get; set; }
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Exam_Domain.Entities
 {
-    public class Options
+    public class Option
     {
         [Key]
         public required string Id { get; set; }
