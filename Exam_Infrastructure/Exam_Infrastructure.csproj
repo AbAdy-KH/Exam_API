@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Exam_Domain\Exam_Domain.csproj" />
+    <ProjectReference Include="..\Exam_Application\Exam_Application.csproj" />
   </ItemGroup>
 
 </Project>

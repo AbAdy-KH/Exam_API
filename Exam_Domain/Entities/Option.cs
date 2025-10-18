@@ -11,7 +11,7 @@ namespace Exam_Domain.Entities
     public class Option
     {
         [Key]
-        public required string Id { get; set; }
+        public required string Id { get; set; } = Guid.NewGuid().ToString();
         public required string Text { get; set; }
         public required bool IsCorrect { get; set; }
 
