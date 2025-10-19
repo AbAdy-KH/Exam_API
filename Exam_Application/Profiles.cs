@@ -14,6 +14,7 @@ namespace Exam_Application
         public Profiles()
         {
             CreateMap<Exam, CreateExamDto>().ReverseMap();
+            CreateMap<Exam, GetExamInfoDto>().ReverseMap();
             CreateMap<Question, CreateQuestionDto>().ReverseMap();
             CreateMap<Option, CreateOptionDto>().ReverseMap();
         }

@@ -17,7 +17,7 @@ namespace Exam_API.Controllers
         }
 
         [HttpPost("CreateExam")]
-        public IActionResult Post([FromBody] CreateExamDto examDto)
+        public ActionResult Post([FromBody] CreateExamDto examDto)
         {
             if (examDto == null)
             {
@@ -27,6 +27,14 @@ namespace Exam_API.Controllers
             _examService.CreateExam(examDto);
 
             return Ok(new {message = "Exam created successfully"});
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<GetExamInfoDto>> GetAll([FromQuery]string filter = "")
+        {
+            var examList = _examService.GetAllExams(filter);
+
+            return Ok(examList);
         }
     }
 }

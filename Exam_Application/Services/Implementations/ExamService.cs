@@ -27,5 +27,18 @@ namespace Exam_Application.Services.Implementations
             _unitOfWork.Exam.Add(exam);
             _unitOfWork.Save();
         }
+
+        public IEnumerable<GetExamInfoDto> GetAllExams(string filter = "")
+        {
+            IEnumerable<Exam> examList = _unitOfWork.Exam.GetAll(e =>
+                e.Title.Contains(filter) ||
+                e.Subject.Name.Contains(filter),
+                "Subject"
+            );
+
+            IEnumerable<GetExamInfoDto> examListDto = _mapper.Map<IEnumerable<GetExamInfoDto>>(examList);
+
+            return examListDto;
+        }
     }
 }
