@@ -16,17 +16,17 @@ namespace Exam_API.Controllers
             _examService = examService;
         }
 
-        [HttpPost]
+        [HttpPost("CreateExam")]
         public IActionResult Post([FromBody] CreateExamDto examDto)
         {
-            if(examDto == null)
+            if (examDto == null)
             {
-                return BadRequest("Exam data is null");
+                return BadRequest(new {message = "Exam is null"});
             }
 
             _examService.CreateExam(examDto);
 
-            return Ok("Exam created successfully");
+            return Ok(new {message = "Exam created successfully"});
         }
     }
 }

@@ -19,6 +19,16 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IExamService, ExamService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://127.0.0.1:5500") // your frontend address
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -42,6 +52,8 @@ if (app.Environment.IsDevelopment())
 //{
 //    app.MapOpenApi();
 //}
+
+app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
 
