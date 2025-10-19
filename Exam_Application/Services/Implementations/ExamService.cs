@@ -40,5 +40,15 @@ namespace Exam_Application.Services.Implementations
 
             return examListDto;
         }
+
+        public GetExamDetailsDto GetExamDetails(string examId)
+        {
+            Exam exam = _unitOfWork.Exam.Get(e => e.Id == examId, "Subject");
+
+
+            GetExamDetailsDto examDto = _mapper.Map<GetExamDetailsDto>(exam);
+
+            return examDto;
+        }
     }
 }

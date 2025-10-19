@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Exam_Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,10 +7,7 @@ using System.Threading.Tasks;
 
 namespace Exam_Application.common.interfaces
 {
-    public interface IUnitOfWork
+    public interface IQuestionRepository : IRepository<Question>
     {
-        IExamRepository Exam { get; }
-        IQuestionRepository Question { get; }
-        void Save();
     }
 }

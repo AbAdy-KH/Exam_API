@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Exam_Domain.Entities
@@ -17,6 +18,8 @@ namespace Exam_Domain.Entities
 
         [ForeignKey("Question")]
         public required string QuestionId { get; set; }
+
+        [JsonIgnore]
         public Question? Question { get; set; }
     }
 }

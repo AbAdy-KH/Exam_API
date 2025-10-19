@@ -15,6 +15,8 @@ namespace Exam_Application
         {
             CreateMap<Exam, CreateExamDto>().ReverseMap();
             CreateMap<Exam, GetExamInfoDto>().ReverseMap();
+            CreateMap<Exam, GetExamDetailsDto>().ReverseMap();
+
             CreateMap<Question, CreateQuestionDto>().ReverseMap();
             CreateMap<Option, CreateOptionDto>().ReverseMap();
         }

@@ -11,10 +11,12 @@ namespace Exam_Infrastructure.Repositories
     {
         private readonly ApplicationDbContext _db;
         public IExamRepository Exam { get; private set; }
+        public IQuestionRepository Question { get; private set; }
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
             Exam = new ExamRepository(_db);
+            Question = new QuestionRepository(_db);
         }
 
         public void Save()

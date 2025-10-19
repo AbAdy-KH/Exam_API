@@ -36,5 +36,16 @@ namespace Exam_API.Controllers
 
             return Ok(examList);
         }
+
+        [HttpGet("{examId}")]
+        public ActionResult<GetExamDetailsDto> GetExam([FromQuery]string examId)
+        {
+            var exam = _examService.GetExamDetails(examId);
+            if (exam == null)
+            {
+                return NotFound(new { message = "Exam not found" });
+            }
+            return Ok(exam);
+        }
     }
 }

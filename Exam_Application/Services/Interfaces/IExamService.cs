@@ -12,5 +12,6 @@ namespace Exam_Application.Services.Interfaces
     {
         void CreateExam(CreateExamDto examDto);
         IEnumerable<GetExamInfoDto> GetAllExams(string filter);
+        GetExamDetailsDto GetExamDetails(string examId);
     }
 }
