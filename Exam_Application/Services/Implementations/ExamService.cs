@@ -28,11 +28,11 @@ namespace Exam_Application.Services.Implementations
             _unitOfWork.Save();
         }
 
-        public IEnumerable<GetExamInfoDto> GetAllExams(string filter = "")
+        public IEnumerable<GetExamInfoDto> GetAllExams(string filter = "", string subjectFilter = "-1")
         {
             IEnumerable<Exam> examList = _unitOfWork.Exam.GetAll(e =>
-                e.Title.Contains(filter) ||
-                e.Subject.Name.Contains(filter),
+                (e.Title.Contains(filter) || e.Subject.Name.Contains(filter)) &&
+                (e.SubjectId == subjectFilter || subjectFilter == "-1"),
                 "Subject"
             );
 

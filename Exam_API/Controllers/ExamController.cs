@@ -30,9 +30,9 @@ namespace Exam_API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<GetExamInfoDto>> GetAll([FromQuery]string filter = "")
+        public ActionResult<IEnumerable<GetExamInfoDto>> GetAll([FromQuery]string filter = "", [FromQuery] string subjectFilter = "-1")
         {
-            var examList = _examService.GetAllExams(filter);
+            var examList = _examService.GetAllExams(filter, subjectFilter);
 
             return Ok(examList);
         }
