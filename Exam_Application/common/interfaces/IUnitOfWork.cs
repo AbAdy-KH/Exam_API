@@ -10,6 +10,7 @@ namespace Exam_Application.common.interfaces
     {
         IExamRepository Exam { get; }
         IQuestionRepository Question { get; }
+        IOptionRepository Option { get; }
         void Save();
     }
 }

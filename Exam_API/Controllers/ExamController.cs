@@ -47,5 +47,31 @@ namespace Exam_API.Controllers
             }
             return Ok(exam);
         }
+
+        [HttpPut("update")]
+        public IActionResult UpdateFullExam([FromBody] UpdateExamDto updateExamDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+                Console.WriteLine("Model binding failed: " + string.Join(", ", errors));
+                return BadRequest(errors);
+            }
+
+            try
+            {
+                _examService.UpdateFullExam(updateExamDto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
