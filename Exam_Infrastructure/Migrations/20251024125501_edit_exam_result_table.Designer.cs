@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Exam_Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251018182432_initialization")]
-    partial class initialization
+    [Migration("20251024125501_edit_exam_result_table")]
+    partial class edit_exam_result_table
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -138,6 +138,25 @@ namespace Exam_Infrastructure.Migrations
                             SubjectId = "3",
                             Title = "Network Exam 1"
                         });
+                });
+
+            modelBuilder.Entity("Exam_Domain.Entities.ExamResult", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ExamId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double>("Mark")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExamId");
+
+                    b.ToTable("ExamResults");
                 });
 
             modelBuilder.Entity("Exam_Domain.Entities.Option", b =>
@@ -468,6 +487,17 @@ namespace Exam_Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("Exam_Domain.Entities.ExamResult", b =>
+                {
+                    b.HasOne("Exam_Domain.Entities.Exam", "Exam")
+                        .WithMany()
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exam");
                 });
 
             modelBuilder.Entity("Exam_Domain.Entities.Option", b =>

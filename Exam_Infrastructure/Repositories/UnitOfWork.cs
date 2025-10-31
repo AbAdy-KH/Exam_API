@@ -14,6 +14,7 @@ namespace Exam_Infrastructure.Repositories
         public IQuestionRepository Question { get; private set; }
         public IOptionRepository Option { get; private set; }
         public ISubjectRepository Subject { get; private set; }
+        public IExamResultRepository ExamResult { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -22,6 +23,7 @@ namespace Exam_Infrastructure.Repositories
             Question = new QuestionRepository(_db);
             Option = new OptionRepository(_db);
             Subject = new SubjectRepository(_db);
+            ExamResult = new ExamResultRepository(_db);
         }
 
         public void Save()

@@ -14,5 +14,6 @@ namespace Exam_Application.Services.Interfaces
         IEnumerable<GetExamInfoDto> GetAllExams(string filter, string subjectFilter);
         GetExamDetailsDto GetExamDetails(string examId);
         void UpdateFullExam(UpdateExamDto updateExamDto);
+        Exam GetFullExam(string examId);
     }
 }

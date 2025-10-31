@@ -38,7 +38,7 @@ namespace Exam_API.Controllers
         }
 
         [HttpGet("{examId}")]
-        public ActionResult<GetExamDetailsDto> GetExam([FromQuery]string examId)
+        public ActionResult<GetExamDetailsDto> GetExamDetails([FromQuery]string examId)
         {
             var exam = _examService.GetExamDetails(examId);
             if (exam == null)
@@ -73,5 +73,16 @@ namespace Exam_API.Controllers
             }
         }
 
+        [HttpGet("full/{examId}")]
+        public ActionResult<GetExamDetailsDto> GetFullExam([FromQuery] string examId)
+        {
+            var exam = _examService.GetFullExam(examId);
+            if (exam == null)
+            {
+                return NotFound(new { message = "Exam not found" });
+            }
+
+            return Ok(exam);
+        }
     }
 }

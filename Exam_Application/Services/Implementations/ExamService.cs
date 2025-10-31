@@ -51,6 +51,15 @@ namespace Exam_Application.Services.Implementations
             return examDto;
         }
 
+        public Exam GetFullExam(string examId)
+        {
+            var exam = _unitOfWork.Exam.Get(
+                e => e.Id == examId,
+                includeProperties: "Subject,Questions,Questions.Options"
+            );
+            return exam;
+        }
+
         public void UpdateFullExam(UpdateExamDto updateExamDto)
         {
             var exam = _unitOfWork.Exam.Get(

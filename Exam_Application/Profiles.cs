@@ -23,6 +23,8 @@ namespace Exam_Application
 
             CreateMap<Option, CreateOptionDto>().ReverseMap();
             CreateMap<Option, UpdateOptionDto>().ReverseMap();
+
+            CreateMap<ExamResult, CreateExamResultDto>().ReverseMap();
         }
     }
 }

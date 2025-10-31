@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Exam_Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initialization : Migration
+    public partial class initializeDnb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -192,6 +192,26 @@ namespace Exam_Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ExamResults",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ExamId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Mark = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExamResults", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ExamResults_Exams_ExamId",
+                        column: x => x.ExamId,
+                        principalTable: "Exams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Questions",
                 columns: table => new
                 {
@@ -320,6 +340,11 @@ namespace Exam_Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ExamResults_ExamId",
+                table: "ExamResults",
+                column: "ExamId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Exams_SubjectId",
                 table: "Exams",
                 column: "SubjectId");
@@ -352,6 +377,9 @@ namespace Exam_Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "ExamResults");
 
             migrationBuilder.DropTable(
                 name: "Options");
