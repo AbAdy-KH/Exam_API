@@ -9,6 +9,8 @@ namespace Exam_Application.Services.Interfaces
 {
     public interface IExamResultService
     {
-        void CreateExamResult(CreateExamResultDto examResultDto);
+        void CreateExamResult(CreateExamResultAndSelectedAnswersDto examResultDto);
+        GetExamResutlAndSelectedAnswersDto GetExamResult(string examResultId);
+        List<GetExamResultDto> GetAllExamResults();
     }
 }

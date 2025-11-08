@@ -13,6 +13,7 @@ namespace Exam_Application.common.interfaces
         IOptionRepository Option { get; }
         ISubjectRepository Subject { get; }
         IExamResultRepository ExamResult { get; }
+        ISelectedAnswerRepository SelectedAnswer { get; }
 
         void Save();
     }

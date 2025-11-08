@@ -10,19 +10,37 @@ namespace Exam_API.Controllers
     public class ExamResultController : ControllerBase
     {
         private readonly IExamResultService _examResultService;
+        //private readonly ISelectedAnswerService _selectedAnswerService;
         public ExamResultController(IExamResultService service)
         {
             _examResultService = service;
         }
 
         [HttpPost("create")]
-        public ActionResult CreateExamResult(CreateExamResultDto examResultDto)
+        public ActionResult CreateExamResult([FromBody] CreateExamResultAndSelectedAnswersDto Dto)
         {
-            if (examResultDto == null) return BadRequest("Exam result cann't be null");
+            if (Dto == null) return BadRequest("Exam result cann't be null");
 
-            _examResultService.CreateExamResult(examResultDto);
+            _examResultService.CreateExamResult(Dto);
 
             return Ok();
+        }
+
+        [HttpGet("{examResultId}")]
+        public ActionResult<GetExamResutlAndSelectedAnswersDto> GetExamResult(string examResultId)
+        {
+            var examResultDto = _examResultService.GetExamResult(examResultId);
+
+            if (examResultDto == null) return NotFound("Exam result not found");
+
+            return Ok(examResultDto);
+        }
+
+        [HttpGet("all")]
+        public ActionResult<List<GetExamResultDto>> GetAllExamResults()
+        {
+            var examResultsDto = _examResultService.GetAllExamResults();
+            return Ok(examResultsDto);
         }
     }
 }

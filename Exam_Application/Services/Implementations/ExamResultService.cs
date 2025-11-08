@@ -15,18 +15,60 @@ namespace Exam_Application.Services.Implementations
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ISelectedAnswerService _selectedAnswerService;
 
-        public ExamResultService(IUnitOfWork unitOfWork, IMapper mapper)
+        public ExamResultService(IUnitOfWork unitOfWork, IMapper mapper, ISelectedAnswerService selectedAnswerService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _selectedAnswerService = selectedAnswerService;
         }
 
-        public void CreateExamResult(CreateExamResultDto examResultDto)
+        public void CreateExamResult(CreateExamResultAndSelectedAnswersDto Dto)
         {
-            var examResult = _mapper.Map<ExamResult>(examResultDto);
+            var examResult = _mapper.Map<ExamResult>(Dto.ExamResultDto);
             _unitOfWork.ExamResult.Add(examResult);
+
+            _selectedAnswerService.CreateSelectedAnswers(examResult.Id, Dto.SelectedAnswersIds);
+
             _unitOfWork.Save();
+        }
+
+        public GetExamResutlAndSelectedAnswersDto GetExamResult(string examResultId)
+        {
+            var examResult = _unitOfWork.ExamResult.Get(er => er.Id == examResultId);
+
+            var selectedAnswersDto = _selectedAnswerService.GetSelectedAnswers(examResultId);
+
+            var examResultDto = new GetExamResutlAndSelectedAnswersDto
+            {
+                Mark = examResult.Mark,
+                SelectedAnswers = selectedAnswersDto
+            };
+
+            return examResultDto;
+        }
+
+        public List<GetExamResultDto> GetAllExamResults()
+        {
+            var examResults = _unitOfWork.ExamResult.GetAll(null, "Exam.Subject");
+
+            List<GetExamResultDto> examResultsDto = new List<GetExamResultDto>();
+
+            foreach (var item in examResults)
+            {
+                var examResultDto = new GetExamResultDto
+                {
+                    ExamResultId = item.Id,
+                    ExamTitle = item.Exam.Title,
+                    SubjectName = item.Exam.Subject.Name,
+                    Mark = item.Mark
+                };
+
+                examResultsDto.Add(examResultDto);
+            }
+
+            return examResultsDto;
         }
     }
 }
