@@ -1,11 +1,6 @@
 ﻿using Exam_Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Exam_Infrastructure
 {
@@ -27,6 +22,42 @@ namespace Exam_Infrastructure
         {
             base.OnModelCreating(builder);
 
+            // 🔹 Fix cascade delete issues:
+            builder.Entity<Exam>()
+                .HasOne(e => e.CreatedBy)
+                .WithMany() // لا نريد قائمة Exams داخل ApplicationUser
+                .HasForeignKey(e => e.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ExamResult>()
+                .HasOne(er => er.Exam)
+                .WithMany()
+                .HasForeignKey(er => er.ExamId)
+                .OnDelete(DeleteBehavior.Restrict); // <-- يمنع الحلقة
+
+            builder.Entity<ExamResult>()
+                .HasOne(er => er.CreatedBy)
+                .WithMany()
+                .HasForeignKey(er => er.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict); // <-- يمنع double cascade
+
+            // 🔹 Seed Data (تقدر تحتفظ به أو تعدله كما تحب)
+            builder.Entity<ApplicationUser>().HasData(
+                new ApplicationUser
+                {
+                    Id = "1",
+                    UserName = "admin",
+                    NormalizedUserName = "ADMIN",
+                    FullName = "Administrator",
+                    Email = "admin@example.com",
+                    NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                    EmailConfirmed = true,
+                    PasswordHash = "AQAAAAIAAYagAAAAEBT5+zvXf2qvnwDkQyYTh...", // قيمة ثابتة
+                    SecurityStamp = "STATIC-SECURITY-STAMP",
+                    ConcurrencyStamp = "STATIC-CONCURRENCY-STAMP"
+                }
+            );
+
             builder.Entity<Subject>().HasData(
                 new Subject { Id = "1", Name = "Math" },
                 new Subject { Id = "2", Name = "Programming" },
@@ -34,17 +65,15 @@ namespace Exam_Infrastructure
             );
 
             builder.Entity<Exam>().HasData(
-                new Exam { Id = "1", Title = "Math Exam 1", SubjectId = "1", Notes = "This is a math exam." },
-                new Exam { Id = "2", Title = "Programming Exam 1", SubjectId = "2", Notes = "This is a programming exam." },
-                new Exam { Id = "3", Title = "Network Exam 1", SubjectId = "3", Notes = "This is a network exam." }
+                new Exam { Id = "1", Title = "Math Exam 1", SubjectId = "1", Notes = "This is a math exam.", CreatedById = "1" },
+                new Exam { Id = "2", Title = "Programming Exam 1", SubjectId = "2", Notes = "This is a programming exam.", CreatedById = "1" },
+                new Exam { Id = "3", Title = "Network Exam 1", SubjectId = "3", Notes = "This is a network exam.", CreatedById = "1" }
             );
 
             builder.Entity<Question>().HasData(
                 new Question { Id = "1", Text = "What is 2 + 2?", ExamId = "1" },
                 new Question { Id = "2", Text = "What is the capital of France?", ExamId = "1" },
-
                 new Question { Id = "3", Text = "What is a class in OOP?", ExamId = "2" },
-
                 new Question { Id = "4", Text = "What is an IP address?", ExamId = "3" }
             );
 

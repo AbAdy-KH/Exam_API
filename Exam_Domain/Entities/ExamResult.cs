@@ -17,9 +17,10 @@ namespace Exam_Domain.Entities
         public required string ExamId { get; set; }
         public Exam? Exam { get; set; }
 
-        //public  string? UserId { get; set; }
-        //public ApplicationUser? User { get; set; }
-
         public required double Mark {  get; set; }
+
+        [ForeignKey(nameof(ApplicationUser))]
+        public required string CreatedById { get; set; }
+        public required ApplicationUser? CreatedBy { get; set; }
     }
 }

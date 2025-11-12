@@ -21,5 +21,9 @@ namespace Exam_Domain.Entities
         public string? Notes { get; set; }
 
         public List<Question>? Questions { get; set; }
+
+        [ForeignKey("ApplicationUser")]
+        public required string CreatedById { get; set; }
+        public ApplicationUser? CreatedBy { get; set; }
     }
 }

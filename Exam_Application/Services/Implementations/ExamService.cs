@@ -15,15 +15,20 @@ namespace Exam_Application.Services.Implementations
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public ExamService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IUserService _userService;
+
+        public ExamService(IUnitOfWork unitOfWork, IMapper mapper, IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _userService = userService;
         }
 
         public void CreateExam(CreateExamDto examDto)
         {
             var exam = _mapper.Map<Exam>(examDto);
+            exam.CreatedById = _userService.GetCurrentUserId();
+
             _unitOfWork.Exam.Add(exam);
             _unitOfWork.Save();
         }
@@ -33,7 +38,7 @@ namespace Exam_Application.Services.Implementations
             IEnumerable<Exam> examList = _unitOfWork.Exam.GetAll(e =>
                 (e.Title.Contains(filter) || e.Subject.Name.Contains(filter)) &&
                 (e.SubjectId == subjectFilter || subjectFilter == "-1"),
-                "Subject"
+                "Subject, CreatedBy"
             );
 
             IEnumerable<GetExamInfoDto> examListDto = _mapper.Map<IEnumerable<GetExamInfoDto>>(examList);
@@ -43,7 +48,7 @@ namespace Exam_Application.Services.Implementations
 
         public GetExamDetailsDto GetExamDetails(string examId)
         {
-            Exam exam = _unitOfWork.Exam.Get(e => e.Id == examId, "Subject");
+            Exam exam = _unitOfWork.Exam.Get(e => e.Id == examId, "Subject, CreatedBy");
 
 
             GetExamDetailsDto examDto = _mapper.Map<GetExamDetailsDto>(exam);

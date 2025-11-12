@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Exam_Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initializeDnb : Migration
+    public partial class CreateDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -178,11 +178,18 @@ namespace Exam_Infrastructure.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SubjectId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Exams", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Exams_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Exams_Subjects_SubjectId",
                         column: x => x.SubjectId,
@@ -197,18 +204,24 @@ namespace Exam_Infrastructure.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ExamId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Mark = table.Column<double>(type: "float", nullable: false)
+                    Mark = table.Column<double>(type: "float", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ExamResults", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_ExamResults_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_ExamResults_Exams_ExamId",
                         column: x => x.ExamId,
                         principalTable: "Exams",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -250,6 +263,36 @@ namespace Exam_Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SelectedAnswers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ExamResultId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    OptionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SelectedAnswers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SelectedAnswers_ExamResults_ExamResultId",
+                        column: x => x.ExamResultId,
+                        principalTable: "ExamResults",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SelectedAnswers_Options_OptionId",
+                        column: x => x.OptionId,
+                        principalTable: "Options",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "1", 0, "STATIC-CONCURRENCY-STAMP", "admin@example.com", true, "Administrator", false, null, "ADMIN@EXAMPLE.COM", "ADMIN", "AQAAAAIAAYagAAAAEBT5+zvXf2qvnwDkQyYTh...", null, false, "STATIC-SECURITY-STAMP", false, "admin" });
+
             migrationBuilder.InsertData(
                 table: "Subjects",
                 columns: new[] { "Id", "Name" },
@@ -262,12 +305,12 @@ namespace Exam_Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Exams",
-                columns: new[] { "Id", "Notes", "SubjectId", "Title" },
+                columns: new[] { "Id", "CreatedById", "Notes", "SubjectId", "Title" },
                 values: new object[,]
                 {
-                    { "1", "This is a math exam.", "1", "Math Exam 1" },
-                    { "2", "This is a programming exam.", "2", "Programming Exam 1" },
-                    { "3", "This is a network exam.", "3", "Network Exam 1" }
+                    { "1", "1", "This is a math exam.", "1", "Math Exam 1" },
+                    { "2", "1", "This is a programming exam.", "2", "Programming Exam 1" },
+                    { "3", "1", "This is a network exam.", "3", "Network Exam 1" }
                 });
 
             migrationBuilder.InsertData(
@@ -340,9 +383,19 @@ namespace Exam_Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ExamResults_CreatedById",
+                table: "ExamResults",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ExamResults_ExamId",
                 table: "ExamResults",
                 column: "ExamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Exams_CreatedById",
+                table: "Exams",
+                column: "CreatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Exams_SubjectId",
@@ -358,6 +411,16 @@ namespace Exam_Infrastructure.Migrations
                 name: "IX_Questions_ExamId",
                 table: "Questions",
                 column: "ExamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SelectedAnswers_ExamResultId",
+                table: "SelectedAnswers",
+                column: "ExamResultId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SelectedAnswers_OptionId",
+                table: "SelectedAnswers",
+                column: "OptionId");
         }
 
         /// <inheritdoc />
@@ -379,22 +442,25 @@ namespace Exam_Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "SelectedAnswers");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
                 name: "ExamResults");
 
             migrationBuilder.DropTable(
                 name: "Options");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "Exams");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Subjects");

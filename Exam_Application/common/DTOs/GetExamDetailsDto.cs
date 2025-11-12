@@ -13,6 +13,6 @@ namespace Exam_Application.common.DTOs
         public string Title { get; set; }
         public Subject Subject { get; set; }
         public string Notes { get; set; }
-        public ApplicationUser User { get; set; }
+        public ApplicationUser CreatedBy { get; set; }
     }
 }

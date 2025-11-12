@@ -16,21 +16,23 @@ namespace Exam_Application.Services.Implementations
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ISelectedAnswerService _selectedAnswerService;
+        private readonly IUserService _userService;
 
-        public ExamResultService(IUnitOfWork unitOfWork, IMapper mapper, ISelectedAnswerService selectedAnswerService)
+        public ExamResultService(IUnitOfWork unitOfWork, IMapper mapper, ISelectedAnswerService selectedAnswerService, IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _selectedAnswerService = selectedAnswerService;
+            _userService = userService;
         }
 
         public void CreateExamResult(CreateExamResultAndSelectedAnswersDto Dto)
         {
             var examResult = _mapper.Map<ExamResult>(Dto.ExamResultDto);
+            examResult.CreatedById = _userService.GetCurrentUserId();
             _unitOfWork.ExamResult.Add(examResult);
 
             _selectedAnswerService.CreateSelectedAnswers(examResult.Id, Dto.SelectedAnswersIds);
-
             _unitOfWork.Save();
         }
 

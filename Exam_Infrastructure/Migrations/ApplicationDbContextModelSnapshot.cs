@@ -89,11 +89,34 @@ namespace Exam_Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "STATIC-CONCURRENCY-STAMP",
+                            Email = "admin@example.com",
+                            EmailConfirmed = true,
+                            FullName = "Administrator",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBT5+zvXf2qvnwDkQyYTh...",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "STATIC-SECURITY-STAMP",
+                            TwoFactorEnabled = false,
+                            UserName = "admin"
+                        });
                 });
 
             modelBuilder.Entity("Exam_Domain.Entities.Exam", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Notes")
@@ -109,6 +132,8 @@ namespace Exam_Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedById");
+
                     b.HasIndex("SubjectId");
 
                     b.ToTable("Exams");
@@ -117,6 +142,7 @@ namespace Exam_Infrastructure.Migrations
                         new
                         {
                             Id = "1",
+                            CreatedById = "1",
                             Notes = "This is a math exam.",
                             SubjectId = "1",
                             Title = "Math Exam 1"
@@ -124,6 +150,7 @@ namespace Exam_Infrastructure.Migrations
                         new
                         {
                             Id = "2",
+                            CreatedById = "1",
                             Notes = "This is a programming exam.",
                             SubjectId = "2",
                             Title = "Programming Exam 1"
@@ -131,6 +158,7 @@ namespace Exam_Infrastructure.Migrations
                         new
                         {
                             Id = "3",
+                            CreatedById = "1",
                             Notes = "This is a network exam.",
                             SubjectId = "3",
                             Title = "Network Exam 1"
@@ -142,6 +170,10 @@ namespace Exam_Infrastructure.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ExamId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -150,6 +182,8 @@ namespace Exam_Infrastructure.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
 
                     b.HasIndex("ExamId");
 
@@ -318,13 +352,17 @@ namespace Exam_Infrastructure.Migrations
 
                     b.Property<string>("ExamResultId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("OptionId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ExamResultId");
+
+                    b.HasIndex("OptionId");
 
                     b.ToTable("SelectedAnswers");
                 });
@@ -495,22 +533,38 @@ namespace Exam_Infrastructure.Migrations
 
             modelBuilder.Entity("Exam_Domain.Entities.Exam", b =>
                 {
+                    b.HasOne("Exam_Domain.Entities.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Exam_Domain.Entities.Subject", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("CreatedBy");
+
                     b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("Exam_Domain.Entities.ExamResult", b =>
                 {
+                    b.HasOne("Exam_Domain.Entities.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Exam_Domain.Entities.Exam", "Exam")
                         .WithMany()
                         .HasForeignKey("ExamId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("CreatedBy");
 
                     b.Navigation("Exam");
                 });
@@ -535,6 +589,25 @@ namespace Exam_Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Exam");
+                });
+
+            modelBuilder.Entity("Exam_Domain.Entities.SelectedAnswer", b =>
+                {
+                    b.HasOne("Exam_Domain.Entities.ExamResult", "ExamResult")
+                        .WithMany()
+                        .HasForeignKey("ExamResultId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Exam_Domain.Entities.Option", "Option")
+                        .WithMany()
+                        .HasForeignKey("OptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ExamResult");
+
+                    b.Navigation("Option");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
