@@ -16,6 +16,7 @@ namespace Exam_Infrastructure.Repositories
         public ISubjectRepository Subject { get; private set; }
         public IExamResultRepository ExamResult { get; private set; }
         public ISelectedAnswerRepository SelectedAnswer { get; private set; }
+        public IUserReapository User { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -26,6 +27,7 @@ namespace Exam_Infrastructure.Repositories
             Subject = new SubjectRepository(_db);
             ExamResult = new ExamResultRepository(_db);
             SelectedAnswer = new SelectedAnswerRepository(_db);
+            User = new UserRepository(_db);
         }
 
         public void Save()

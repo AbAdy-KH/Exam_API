@@ -29,7 +29,7 @@ namespace Exam_Application.Services.Implementations
         public void CreateExamResult(CreateExamResultAndSelectedAnswersDto Dto)
         {
             var examResult = _mapper.Map<ExamResult>(Dto.ExamResultDto);
-            examResult.CreatedById = _userService.GetCurrentUserId();
+            examResult.CreatedById = _userService.GetCurrentUser();
             _unitOfWork.ExamResult.Add(examResult);
 
             _selectedAnswerService.CreateSelectedAnswers(examResult.Id, Dto.SelectedAnswersIds);

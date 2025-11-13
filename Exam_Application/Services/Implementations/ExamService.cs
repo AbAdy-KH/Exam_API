@@ -27,7 +27,7 @@ namespace Exam_Application.Services.Implementations
         public void CreateExam(CreateExamDto examDto)
         {
             var exam = _mapper.Map<Exam>(examDto);
-            exam.CreatedById = _userService.GetCurrentUserId();
+            exam.CreatedById = _userService.GetCurrentUser();
 
             _unitOfWork.Exam.Add(exam);
             _unitOfWork.Save();

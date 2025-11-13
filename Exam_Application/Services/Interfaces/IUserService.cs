@@ -1,4 +1,5 @@
-﻿using Exam_Domain.Entities;
+﻿using Exam_Application.common.DTOs;
+using Exam_Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Exam_Application.Services.Interfaces
 {
     public interface IUserService
     {
-        string GetCurrentUserId();
+        string GetCurrentUser();
+        GetUserProfileDto GetUserProfileInfo(string userId);
     }
 }

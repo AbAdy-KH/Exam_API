@@ -1,9 +1,12 @@
 using Exam_Application.common.interfaces;
 using Exam_Application.Services.Implementations;
 using Exam_Application.Services.Interfaces;
+using Exam_Domain.Entities;
 using Exam_Infrastructure;
 using Exam_Infrastructure.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +25,8 @@ builder.Services.AddScoped<IOptionRepository, OptionRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<IExamResultRepository, ExamResultRepository>();
 builder.Services.AddScoped<ISelectedAnswerRepository, SelectedAnswerRepository>();
+builder.Services.AddScoped<IUserReapository, UserRepository>();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IExamService, ExamService>();
@@ -30,6 +35,7 @@ builder.Services.AddScoped<ISubjectService, SubjecdService>();
 builder.Services.AddScoped<IExamResultService, ExamResultService>();
 builder.Services.AddScoped<ISelectedAnswerService, SelectedAnswerService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 
 builder.Services.AddCors(options =>
@@ -49,6 +55,21 @@ builder.Services.AddCors(options =>
          .AllowAnyHeader()
          .AllowAnyMethod());
 });
+
+// Register Identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+    {
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireDigit = false;
+        options.Password.RequiredLength = 6;
+
+        options.User.RequireUniqueEmail = true;
+    }
+)
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 
 builder.Services.AddControllers();
