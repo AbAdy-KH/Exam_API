@@ -22,7 +22,7 @@ namespace Exam_API.Controllers
 
             var response = await _authService.Register(registerDto);
 
-            if(!response.Success) return BadRequest(response.Errors);
+            if(!response.Success) return BadRequest(new { response.Errors });
 
             return Ok(response.Message); 
         }
@@ -31,8 +31,8 @@ namespace Exam_API.Controllers
         public async Task<ActionResult<string>> Login(LoginDto loginDto)
         {
             var response = await _authService.Login(loginDto);
-            if (!response.Success) return BadRequest(response.Errors);
-            return Ok(response.Data);
+            if (!response.Success) return BadRequest(new { response.Errors });
+            return Ok(new { response.Data });
         }
     }
 }

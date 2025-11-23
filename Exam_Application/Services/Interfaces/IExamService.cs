@@ -11,7 +11,7 @@ namespace Exam_Application.Services.Interfaces
     public interface IExamService
     {
         void CreateExam(CreateExamDto examDto);
-        IEnumerable<GetExamInfoDto> GetAllExams(string filter, string subjectFilter);
+        IEnumerable<GetExamInfoDto> GetAllExams(string userId, string filter, string subjectFilter);
         GetExamDetailsDto GetExamDetails(string examId);
         void UpdateFullExam(UpdateExamDto updateExamDto);
         Exam GetFullExam(string examId);

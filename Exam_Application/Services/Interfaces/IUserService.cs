@@ -10,7 +10,7 @@ namespace Exam_Application.Services.Interfaces
 {
     public interface IUserService
     {
-        string GetCurrentUser();
+        string GetCurrentUserId();
         GetUserProfileDto GetUserProfileInfo(string userId);
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Exam_Application.common.DTOs;
 using Exam_Application.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,6 +10,7 @@ namespace Exam_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ExamController : ControllerBase
     {
         private readonly IExamService _examService;
@@ -30,9 +33,9 @@ namespace Exam_API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<GetExamInfoDto>> GetAll([FromQuery]string filter = "", [FromQuery] string subjectFilter = "-1")
+        public ActionResult<IEnumerable<GetExamInfoDto>> GetAll([FromQuery] string userId = "", [FromQuery]string filter = "", [FromQuery] string subjectFilter = "-1")
         {
-            var examList = _examService.GetAllExams(filter, subjectFilter);
+            var examList = _examService.GetAllExams(userId, filter, subjectFilter);
 
             return Ok(examList);
         }

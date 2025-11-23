@@ -27,19 +27,33 @@ namespace Exam_Application.Services.Implementations
         public void CreateExam(CreateExamDto examDto)
         {
             var exam = _mapper.Map<Exam>(examDto);
-            exam.CreatedById = _userService.GetCurrentUser();
+            exam.CreatedById = _userService.GetCurrentUserId();
 
             _unitOfWork.Exam.Add(exam);
             _unitOfWork.Save();
         }
 
-        public IEnumerable<GetExamInfoDto> GetAllExams(string filter = "", string subjectFilter = "-1")
+        public IEnumerable<GetExamInfoDto> GetAllExams(string userId = "", string filter = "", string subjectFilter = "-1")
         {
-            IEnumerable<Exam> examList = _unitOfWork.Exam.GetAll(e =>
-                (e.Title.Contains(filter) || e.Subject.Name.Contains(filter)) &&
-                (e.SubjectId == subjectFilter || subjectFilter == "-1"),
-                "Subject, CreatedBy"
-            );
+            IEnumerable<Exam> examList;
+            if (userId != "null")
+            {
+                examList = _unitOfWork.Exam.GetAll(e =>
+                   (e.CreatedById == userId) && 
+                   (e.Title.Contains(filter) || e.Subject.Name.Contains(filter)) &&
+                   (e.SubjectId == subjectFilter || subjectFilter == "-1"),
+                   "Subject, CreatedBy"
+               );
+            }
+            else
+            {
+                
+                examList = _unitOfWork.Exam.GetAll(e =>
+                   (e.Title.Contains(filter) || e.Subject.Name.Contains(filter) || e.CreatedBy.UserName.Contains(filter)) &&
+                   (e.SubjectId == subjectFilter || subjectFilter == "-1"),
+                   "Subject, CreatedBy"
+               );
+            }
 
             IEnumerable<GetExamInfoDto> examListDto = _mapper.Map<IEnumerable<GetExamInfoDto>>(examList);
 

@@ -11,6 +11,6 @@ namespace Exam_Application.Services.Interfaces
     {
         void CreateExamResult(CreateExamResultAndSelectedAnswersDto examResultDto);
         GetExamResutlAndSelectedAnswersDto GetExamResult(string examResultId);
-        List<GetExamResultDto> GetAllExamResults();
+        List<GetExamResultDto> GetAllExamResults(string userId);
     }
 }

@@ -46,6 +46,9 @@ namespace Exam_Application.Services.Implementations
             var user = await _userManager.FindByEmailAsync(registerDto.Email);
             if (user != null) return new Response<bool> { Success = false, Errors = "This is email is exists!" };
 
+            bool isUsernameExists = (await _userManager.FindByNameAsync(registerDto.Username)) != null;
+            if (isUsernameExists) return new Response<bool> { Success = false, Errors = "This username is exists!" };
+
             ApplicationUser newUser = new ApplicationUser
             {
                 UserName = registerDto.Username,

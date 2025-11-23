@@ -7,6 +7,7 @@ namespace Exam_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Microsoft.AspNetCore.Authorization.Authorize]
     public class ExamResultController : ControllerBase
     {
         private readonly IExamResultService _examResultService;
@@ -36,10 +37,12 @@ namespace Exam_API.Controllers
             return Ok(examResultDto);
         }
 
-        [HttpGet("all")]
-        public ActionResult<List<GetExamResultDto>> GetAllExamResults()
+        [HttpGet]
+        public ActionResult<List<GetExamResultDto>> GetAllExamResults([FromQuery] string userId)
         {
-            var examResultsDto = _examResultService.GetAllExamResults();
+            if(string.IsNullOrEmpty(userId)) return BadRequest("User id cann't be null or empty");
+
+            var examResultsDto = _examResultService.GetAllExamResults(userId);
             return Ok(examResultsDto);
         }
     }

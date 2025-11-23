@@ -29,7 +29,7 @@ namespace Exam_Application.Services.Implementations
         public void CreateExamResult(CreateExamResultAndSelectedAnswersDto Dto)
         {
             var examResult = _mapper.Map<ExamResult>(Dto.ExamResultDto);
-            examResult.CreatedById = _userService.GetCurrentUser();
+            examResult.CreatedById = _userService.GetCurrentUserId();
             _unitOfWork.ExamResult.Add(examResult);
 
             _selectedAnswerService.CreateSelectedAnswers(examResult.Id, Dto.SelectedAnswersIds);
@@ -51,9 +51,11 @@ namespace Exam_Application.Services.Implementations
             return examResultDto;
         }
 
-        public List<GetExamResultDto> GetAllExamResults()
+        public List<GetExamResultDto> GetAllExamResults(string userId)
         {
-            var examResults = _unitOfWork.ExamResult.GetAll(null, "Exam.Subject");
+            IEnumerable<ExamResult> examResults;
+            
+            examResults = _unitOfWork.ExamResult.GetAll(e => e.CreatedById == userId, "Exam.Subject");
 
             List<GetExamResultDto> examResultsDto = new List<GetExamResultDto>();
 
