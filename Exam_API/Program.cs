@@ -1,14 +1,17 @@
 using Azure.Core;
 using Exam_Application.common.interfaces;
+using Exam_Application.Contracts;
 using Exam_Application.Services.Implementations;
 using Exam_Application.Services.Interfaces;
 using Exam_Domain.Entities;
 using Exam_Infrastructure;
 using Exam_Infrastructure.Repositories;
+using Exam_Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using OpenAI.Chat;
 using System;
 using System.Text;
 
@@ -40,6 +43,7 @@ builder.Services.AddScoped<IExamResultService, ExamResultService>();
 builder.Services.AddScoped<ISelectedAnswerService, SelectedAnswerService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IChatBotService, ChatBotService>();
 
 
 builder.Services.AddCors(options =>
@@ -97,7 +101,13 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddSingleton<ChatClient>(serviceProvider =>
+{
+    var apiKey = builder.Configuration["OpenAI:API_KEY"];
+    var model = "gpt-4o-mini";
 
+    return new ChatClient(model, apiKey);
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

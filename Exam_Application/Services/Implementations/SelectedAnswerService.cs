@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Exam_Application.common.DTOs;
+using Exam_Application.common.DTOs.ExamResultAndSelectedAnswers;
 using Exam_Application.common.interfaces;
 using Exam_Application.Services.Interfaces;
 using Exam_Domain.Entities;

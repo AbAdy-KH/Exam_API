@@ -1,5 +1,5 @@
 ﻿using Exam_Application.common;
-using Exam_Application.common.DTOs;
+using Exam_Application.common.DTOs.UserAndAuth;
 using Exam_Application.Services.Interfaces;
 using Exam_Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -32,7 +32,7 @@ namespace Exam_Application.Services.Implementations
 
         public async Task<Response<string>> Login(LoginDto loginDto)
         {
-            var user = await _userManager.FindByEmailAsync(loginDto.Email);
+            var user = await _userManager.FindByNameAsync(loginDto.Username);
             if(user == null) return new Response<string> { Success = false, Errors = "Invalid email or password!" };
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);

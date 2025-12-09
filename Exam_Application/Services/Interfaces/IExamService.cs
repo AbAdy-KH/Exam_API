@@ -1,4 +1,4 @@
-﻿using Exam_Application.common.DTOs;
+﻿using Exam_Application.common.DTOs.Exam;
 using Exam_Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ namespace Exam_Application.Services.Interfaces
     public interface IExamService
     {
         void CreateExam(CreateExamDto examDto);
-        IEnumerable<GetExamInfoDto> GetAllExams(string userId, string filter, string subjectFilter);
+        IEnumerable<GetExamInfoDto> GetAllExams(int pageNumber, string userId, string filter, string subjectFilter);
         GetExamDetailsDto GetExamDetails(string examId);
         void UpdateFullExam(UpdateExamDto updateExamDto);
         Exam GetFullExam(string examId);

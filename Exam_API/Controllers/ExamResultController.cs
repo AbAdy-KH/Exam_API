@@ -1,4 +1,4 @@
-﻿using Exam_Application.common.DTOs;
+﻿using Exam_Application.common.DTOs.ExamResult;
 using Exam_Application.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -42,8 +42,16 @@ namespace Exam_API.Controllers
         {
             if(string.IsNullOrEmpty(userId)) return BadRequest("User id cann't be null or empty");
 
-            var examResultsDto = _examResultService.GetAllExamResults(userId);
-            return Ok(examResultsDto);
+            try
+            {
+                var examResultsDto = _examResultService.GetAllExamResults(userId);
+
+                return Ok(examResultsDto);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

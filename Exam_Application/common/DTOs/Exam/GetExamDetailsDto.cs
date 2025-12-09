@@ -5,14 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Exam_Application.common.DTOs
+namespace Exam_Application.common.DTOs.Exam
 {
-    public class GetFullExamDto
+    public class GetExamDetailsDto
     {
         public string Id { get; set; }
         public string Title { get; set; }
-        public string Notes { get; set; }
         public Subject Subject { get; set; }
-        public ApplicationUser User { get; set; }
+        public string Notes { get; set; }
+        //public ApplicationUser CreatedBy { get; set; }
+        public string UserId { get; set; }
+        public string Username { get; set; }
     }
 }

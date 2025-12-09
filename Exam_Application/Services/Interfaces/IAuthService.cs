@@ -1,5 +1,5 @@
 ﻿using Exam_Application.common;
-using Exam_Application.common.DTOs;
+using Exam_Application.common.DTOs.UserAndAuth;
 using System;
 using System.Collections.Generic;
 using System.Linq;

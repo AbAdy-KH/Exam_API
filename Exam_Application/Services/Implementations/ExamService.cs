@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
-using Exam_Application.common.DTOs;
+using Exam_Application.common.DTOs.Exam;
 using Exam_Application.common.interfaces;
 using Exam_Application.Services.Interfaces;
 using Exam_Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,9 +34,9 @@ namespace Exam_Application.Services.Implementations
             _unitOfWork.Save();
         }
 
-        public IEnumerable<GetExamInfoDto> GetAllExams(string userId = "", string filter = "", string subjectFilter = "-1")
+        public IEnumerable<GetExamInfoDto> GetAllExams(int pageNumber = 1, string userId = "", string filter = "", string subjectFilter = "-1")
         {
-            IEnumerable<Exam> examList;
+            IQueryable<Exam> examList;
             if (userId != "null")
             {
                 examList = _unitOfWork.Exam.GetAll(e =>
@@ -43,29 +44,48 @@ namespace Exam_Application.Services.Implementations
                    (e.Title.Contains(filter) || e.Subject.Name.Contains(filter)) &&
                    (e.SubjectId == subjectFilter || subjectFilter == "-1"),
                    "Subject, CreatedBy"
-               );
+               ).AsQueryable();
             }
             else
-            {
-                
+            {             
                 examList = _unitOfWork.Exam.GetAll(e =>
                    (e.Title.Contains(filter) || e.Subject.Name.Contains(filter) || e.CreatedBy.UserName.Contains(filter)) &&
                    (e.SubjectId == subjectFilter || subjectFilter == "-1"),
                    "Subject, CreatedBy"
-               );
+               ).AsQueryable();
             }
 
-            IEnumerable<GetExamInfoDto> examListDto = _mapper.Map<IEnumerable<GetExamInfoDto>>(examList);
 
-            return examListDto;
+            var list = examList.Select(e =>
+                new GetExamInfoDto
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Subject = e.Subject,
+                    Username = e.CreatedBy.UserName
+                }
+            ).AsQueryable();
+
+            list = list
+                .Skip((pageNumber - 1) * 50)
+                .Take(50);
+
+            return list;
         }
 
         public GetExamDetailsDto GetExamDetails(string examId)
         {
             Exam exam = _unitOfWork.Exam.Get(e => e.Id == examId, "Subject, CreatedBy");
 
-
-            GetExamDetailsDto examDto = _mapper.Map<GetExamDetailsDto>(exam);
+            GetExamDetailsDto examDto = new GetExamDetailsDto
+            {
+                Id = exam.Id,
+                Title = exam.Title,
+                Subject = exam.Subject,
+                Notes = exam.Notes,
+                UserId = exam.CreatedBy.Id,
+                Username = exam.CreatedBy.UserName
+            };
 
             return examDto;
         }
@@ -86,6 +106,13 @@ namespace Exam_Application.Services.Implementations
                 includeProperties: "Questions,Questions.Options"
             );
 
+            string userId = _userService.GetCurrentUserId();
+
+            if (string.IsNullOrEmpty(userId) || userId != exam.CreatedById)
+            {
+                throw new Exception("Unauthorized to update this exam");
+            }
+
             if (exam == null)
                 throw new Exception("Exam not found");
 
@@ -100,7 +127,7 @@ namespace Exam_Application.Services.Implementations
                 .Select(q => q.Id)
                 .ToList();
 
-            // 🔹 Find questions that were removed
+            //  Find questions that were removed
             var questionsToDelete = exam.Questions
                 .Where(q => !incomingQuestionIds.Contains(q.Id))
                 .ToList();

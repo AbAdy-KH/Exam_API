@@ -1,4 +1,4 @@
-﻿using Exam_Application.common.DTOs;
+﻿using Exam_Application.common.DTOs.UserAndAuth;
 using Exam_Application.common.interfaces;
 using Exam_Application.Services.Interfaces;
 using Exam_Domain.Entities;

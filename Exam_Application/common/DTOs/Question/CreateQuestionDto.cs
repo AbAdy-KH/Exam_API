@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Exam_Application.common.DTOs.Option;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Exam_Application.common.DTOs
+namespace Exam_Application.common.DTOs.Question
 {
     public class CreateQuestionDto
     {

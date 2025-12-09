@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Exam_Application.common.DTOs
+namespace Exam_Application.common.DTOs.Exam
 {
     public class GetExamInfoDto
     {
@@ -16,6 +16,7 @@ namespace Exam_Application.common.DTOs
 
         public string Title { get; set; }
 
-        public ApplicationUser CreatedBy { get; set; }
+        //public ApplicationUser CreatedBy { get; set; }
+        public string Username { get; set; }
     }
 }

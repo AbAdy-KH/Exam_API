@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
-using Exam_Application.common.DTOs;
+using Exam_Application.common.DTOs.Exam;
+using Exam_Application.common.DTOs.ExamResult;
+using Exam_Application.common.DTOs.Option;
+using Exam_Application.common.DTOs.Question;
 using Exam_Domain.Entities;
 using System;
 using System.Collections.Generic;

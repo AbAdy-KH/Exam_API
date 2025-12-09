@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Exam_Application.common.DTOs;
+using Exam_Application.common.DTOs.ExamResult;
 using Exam_Application.common.interfaces;
 using Exam_Application.Services.Interfaces;
 using Exam_Domain.Entities;
@@ -54,7 +54,10 @@ namespace Exam_Application.Services.Implementations
         public List<GetExamResultDto> GetAllExamResults(string userId)
         {
             IEnumerable<ExamResult> examResults;
-            
+
+            if(userId != _userService.GetCurrentUserId())
+                throw new UnauthorizedAccessException("You are not authorized to view these exam results.");
+
             examResults = _unitOfWork.ExamResult.GetAll(e => e.CreatedById == userId, "Exam.Subject");
 
             List<GetExamResultDto> examResultsDto = new List<GetExamResultDto>();

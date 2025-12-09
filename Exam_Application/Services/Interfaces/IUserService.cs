@@ -1,4 +1,4 @@
-﻿using Exam_Application.common.DTOs;
+﻿using Exam_Application.common.DTOs.UserAndAuth;
 using Exam_Domain.Entities;
 using System;
 using System.Collections.Generic;

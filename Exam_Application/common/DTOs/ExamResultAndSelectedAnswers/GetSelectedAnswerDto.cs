@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Exam_Application.common.DTOs
+namespace Exam_Application.common.DTOs.ExamResultAndSelectedAnswers
 {
     public class GetSelectedAnswerDto
     {

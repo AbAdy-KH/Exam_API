@@ -1,4 +1,4 @@
-﻿using Exam_Application.common.DTOs;
+﻿using Exam_Application.common.DTOs.ExamResult;
 using System;
 using System.Collections.Generic;
 using System.Linq;

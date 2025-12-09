@@ -1,4 +1,4 @@
-﻿using Exam_Application.common.DTOs;
+﻿using Exam_Application.common.DTOs.UserAndAuth;
 using Exam_Application.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +24,7 @@ namespace Exam_API.Controllers
 
             if(!response.Success) return BadRequest(new { response.Errors });
 
-            return Ok(response.Message); 
+            return Ok(new { response.Message }); 
         }
 
         [HttpPost("login")]
