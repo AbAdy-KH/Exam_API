@@ -15,7 +15,7 @@ namespace Exam_API.Controllers
     public class ExamController : ControllerBase
     {
         private readonly IExamService _examService;
-        public ExamController(IExamService examService, IHttpContextAccessor httpContextAccessor)
+        public ExamController(IExamService examService)
         {
             _examService = examService;
         }

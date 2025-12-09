@@ -32,6 +32,7 @@ namespace Exam_Application.Services.Implementations
             examResult.CreatedById = _userService.GetCurrentUserId();
             _unitOfWork.ExamResult.Add(examResult);
 
+            examResult.CreatedAt = DateTime.UtcNow;
             _selectedAnswerService.CreateSelectedAnswers(examResult.Id, Dto.SelectedAnswersIds);
             _unitOfWork.Save();
         }
@@ -58,7 +59,10 @@ namespace Exam_Application.Services.Implementations
             if(userId != _userService.GetCurrentUserId())
                 throw new UnauthorizedAccessException("You are not authorized to view these exam results.");
 
-            examResults = _unitOfWork.ExamResult.GetAll(e => e.CreatedById == userId, "Exam.Subject");
+            examResults = _unitOfWork.ExamResult
+                .GetAll(e => e.CreatedById == userId, "Exam.Subject")
+                .OrderByDescending(e => e.CreatedAt)
+                .Take(20);
 
             List<GetExamResultDto> examResultsDto = new List<GetExamResultDto>();
 

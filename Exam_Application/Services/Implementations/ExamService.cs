@@ -30,13 +30,14 @@ namespace Exam_Application.Services.Implementations
             var exam = _mapper.Map<Exam>(examDto);
             exam.CreatedById = _userService.GetCurrentUserId();
 
+            exam.CreatedAt = DateTime.UtcNow;
             _unitOfWork.Exam.Add(exam);
             _unitOfWork.Save();
         }
 
         public IEnumerable<GetExamInfoDto> GetAllExams(int pageNumber = 1, string userId = "", string filter = "", string subjectFilter = "-1")
         {
-            IQueryable<Exam> examList;
+            IEnumerable<Exam> examList;
             if (userId != "null")
             {
                 examList = _unitOfWork.Exam.GetAll(e =>
@@ -44,15 +45,21 @@ namespace Exam_Application.Services.Implementations
                    (e.Title.Contains(filter) || e.Subject.Name.Contains(filter)) &&
                    (e.SubjectId == subjectFilter || subjectFilter == "-1"),
                    "Subject, CreatedBy"
-               ).AsQueryable();
+               )
+               .OrderByDescending(e => e.CreatedAt)
+               .Skip((pageNumber - 1) * 20)
+               .Take(20);
             }
             else
-            {             
+            {
                 examList = _unitOfWork.Exam.GetAll(e =>
                    (e.Title.Contains(filter) || e.Subject.Name.Contains(filter) || e.CreatedBy.UserName.Contains(filter)) &&
                    (e.SubjectId == subjectFilter || subjectFilter == "-1"),
                    "Subject, CreatedBy"
-               ).AsQueryable();
+               )
+               .OrderByDescending(e => e.CreatedAt)
+               .Skip((pageNumber - 1) * 20)
+               .Take(20);
             }
 
 
@@ -64,12 +71,7 @@ namespace Exam_Application.Services.Implementations
                     Subject = e.Subject,
                     Username = e.CreatedBy.UserName
                 }
-            ).AsQueryable();
-
-            list = list
-                .Skip((pageNumber - 1) * 50)
-                .Take(50);
-
+            );
             return list;
         }
 

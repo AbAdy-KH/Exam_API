@@ -115,6 +115,9 @@ namespace Exam_Infrastructure.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("CreatedById")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -142,6 +145,7 @@ namespace Exam_Infrastructure.Migrations
                         new
                         {
                             Id = "1",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedById = "1",
                             Notes = "This is a math exam.",
                             SubjectId = "1",
@@ -150,6 +154,7 @@ namespace Exam_Infrastructure.Migrations
                         new
                         {
                             Id = "2",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedById = "1",
                             Notes = "This is a programming exam.",
                             SubjectId = "2",
@@ -158,6 +163,7 @@ namespace Exam_Infrastructure.Migrations
                         new
                         {
                             Id = "3",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedById = "1",
                             Notes = "This is a network exam.",
                             SubjectId = "3",
@@ -169,6 +175,9 @@ namespace Exam_Infrastructure.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedById")
                         .IsRequired()

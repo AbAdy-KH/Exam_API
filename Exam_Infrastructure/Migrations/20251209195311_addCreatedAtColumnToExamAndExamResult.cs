@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Exam_Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateDb : Migration
+    public partial class addCreatedAtColumnToExamAndExamResult : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -179,7 +179,8 @@ namespace Exam_Infrastructure.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SubjectId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -205,7 +206,8 @@ namespace Exam_Infrastructure.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ExamId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Mark = table.Column<double>(type: "float", nullable: false),
-                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -305,12 +307,12 @@ namespace Exam_Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Exams",
-                columns: new[] { "Id", "CreatedById", "Notes", "SubjectId", "Title" },
+                columns: new[] { "Id", "CreatedAt", "CreatedById", "Notes", "SubjectId", "Title" },
                 values: new object[,]
                 {
-                    { "1", "1", "This is a math exam.", "1", "Math Exam 1" },
-                    { "2", "1", "This is a programming exam.", "2", "Programming Exam 1" },
-                    { "3", "1", "This is a network exam.", "3", "Network Exam 1" }
+                    { "1", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1", "This is a math exam.", "1", "Math Exam 1" },
+                    { "2", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1", "This is a programming exam.", "2", "Programming Exam 1" },
+                    { "3", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1", "This is a network exam.", "3", "Network Exam 1" }
                 });
 
             migrationBuilder.InsertData(

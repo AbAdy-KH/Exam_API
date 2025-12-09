@@ -11,7 +11,6 @@ namespace Exam_API.Controllers
     public class ExamResultController : ControllerBase
     {
         private readonly IExamResultService _examResultService;
-        //private readonly ISelectedAnswerService _selectedAnswerService;
         public ExamResultController(IExamResultService service)
         {
             _examResultService = service;

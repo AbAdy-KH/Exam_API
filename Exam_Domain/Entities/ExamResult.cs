@@ -22,5 +22,7 @@ namespace Exam_Domain.Entities
         [ForeignKey(nameof(ApplicationUser))]
         public required string CreatedById { get; set; }
         public required ApplicationUser? CreatedBy { get; set; }
+
+        public DateTime CreatedAt { get; set; }
     }
 }
