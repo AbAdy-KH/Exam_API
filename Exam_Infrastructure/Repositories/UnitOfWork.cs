@@ -17,6 +17,7 @@ namespace Exam_Infrastructure.Repositories
         public IExamResultRepository ExamResult { get; private set; }
         public ISelectedAnswerRepository SelectedAnswer { get; private set; }
         public IUserReapository User { get; private set; }
+        public ISavedExamRepository SavedExam { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -28,6 +29,7 @@ namespace Exam_Infrastructure.Repositories
             ExamResult = new ExamResultRepository(_db);
             SelectedAnswer = new SelectedAnswerRepository(_db);
             User = new UserRepository(_db);
+            SavedExam = new SavedExamRepository(_db);
         }
 
         public void Save()

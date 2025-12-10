@@ -3,6 +3,7 @@ using Exam_Application.common.DTOs.Exam;
 using Exam_Application.common.DTOs.ExamResult;
 using Exam_Application.common.DTOs.Option;
 using Exam_Application.common.DTOs.Question;
+using Exam_Application.common.DTOs.SavedExam;
 using Exam_Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,8 @@ namespace Exam_Application
             CreateMap<Option, UpdateOptionDto>().ReverseMap();
 
             CreateMap<ExamResult, CreateExamResultDto>().ReverseMap();
+
+            CreateMap<SavedExam, CreateSaveExamDto>().ReverseMap();
         }
     }
 }

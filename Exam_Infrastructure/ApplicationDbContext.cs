@@ -17,6 +17,7 @@ namespace Exam_Infrastructure
         public DbSet<Option> Options { get; set; }
         public DbSet<ExamResult> ExamResults { get; set; }
         public DbSet<SelectedAnswer> SelectedAnswers { get; set; }
+        public DbSet<SavedExam> SavedExams { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

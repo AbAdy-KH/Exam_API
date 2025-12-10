@@ -33,7 +33,7 @@ builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<IExamResultRepository, ExamResultRepository>();
 builder.Services.AddScoped<ISelectedAnswerRepository, SelectedAnswerRepository>();
 builder.Services.AddScoped<IUserReapository, UserRepository>();
-
+builder.Services.AddScoped<ISavedExamRepository, SavedExamRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IExamService, ExamService>();
@@ -44,6 +44,7 @@ builder.Services.AddScoped<ISelectedAnswerService, SelectedAnswerService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IChatBotService, ChatBotService>();
+builder.Services.AddScoped<ISavedExamService, SavedExamService>();
 
 
 builder.Services.AddCors(options =>

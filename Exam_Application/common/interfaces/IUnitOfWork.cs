@@ -15,6 +15,7 @@ namespace Exam_Application.common.interfaces
         IExamResultRepository ExamResult { get; }
         ISelectedAnswerRepository SelectedAnswer { get; }
         IUserReapository User { get; }
+        ISavedExamRepository SavedExam { get; }
 
         void Save();
     }
