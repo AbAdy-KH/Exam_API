@@ -10,6 +10,7 @@ namespace Exam_Application.common.DTOs.Question
     public class CreateQuestionDto
     {
         //public string Id { get; set; }
+        public int QuestionNumber { get; set; }
         public string Text { get; set; }
         public List<CreateOptionDto> Options { get; set; }
     }

@@ -22,7 +22,14 @@ namespace Exam_Application.Services.Implementations
 
         public IEnumerable<Question> GetAllQuestions(string examId)
         {
-            IEnumerable<Question> questionList = _unitOfWork.Question.GetAll(q => q.ExamId == examId, "Options");
+            IEnumerable<Question> questionList = _unitOfWork.Question
+                .GetAll(q => q.ExamId == examId, "Options")
+                .OrderBy(q => q.QuestionNumber);
+
+            foreach (var item in questionList)
+            {
+                item.Options.OrderBy(o => o.OptionNumber);
+            }
 
             return questionList;
         }

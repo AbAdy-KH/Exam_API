@@ -13,6 +13,7 @@ namespace Exam_Domain.Entities
     {
         [Key]
         public required string Id { get; set; } = Guid.NewGuid().ToString();
+        public int QuestionNumber { get; set; }
         public required string Text { get; set; }
 
         [ForeignKey("Exam")]

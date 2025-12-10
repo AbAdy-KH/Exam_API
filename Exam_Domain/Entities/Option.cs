@@ -13,6 +13,7 @@ namespace Exam_Domain.Entities
     {
         [Key]
         public required string Id { get; set; } = Guid.NewGuid().ToString();
+        public int OptionNumber { get; set; }
         public required string Text { get; set; }
         public required bool IsCorrect { get; set; }
 

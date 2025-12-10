@@ -9,6 +9,7 @@ namespace Exam_Application.common.DTOs.Option
     public class UpdateOptionDto
     {
         public string Id { get; set; }
+        public int OptionNumber { get; set; }
         public string Text {  get; set; }
         public bool IsCorrect { get; set; }
     }

@@ -98,6 +98,14 @@ namespace Exam_Application.Services.Implementations
                 e => e.Id == examId,
                 includeProperties: "Subject,Questions,Questions.Options"
             );
+
+            exam.Questions.OrderBy(q => q.QuestionNumber);
+
+            foreach (var item in exam.Questions)
+            {
+                item.Options.OrderBy(o => o.OptionNumber);
+            }
+
             return exam;
         }
 
