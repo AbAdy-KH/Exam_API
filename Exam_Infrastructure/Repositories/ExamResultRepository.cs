@@ -16,5 +16,10 @@ namespace Exam_Infrastructure.Repositories
         {
             _db = db;
         }
+
+        public int NumberOfAttemptsToExam(string examId)
+        {
+            return _db.ExamResults.Count(e => e.ExamId == examId);
+        }
     }
 }

@@ -52,5 +52,13 @@ namespace Exam_API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("NumberOfAttemptsToExam")]
+        public ActionResult<int> NumberOfAttemptsToExam(string examId)
+        {
+            int response = _examResultService.NumberOfAttemptsToExam(examId);
+
+            return Ok(response);
+        }
     }
 }

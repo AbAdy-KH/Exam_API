@@ -81,5 +81,10 @@ namespace Exam_Application.Services.Implementations
 
             return examResultsDto;
         }
+
+        public int NumberOfAttemptsToExam(string examId)
+        {
+            return _unitOfWork.ExamResult.NumberOfAttemptsToExam(examId);
+        }
     }
 }

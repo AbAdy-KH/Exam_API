@@ -25,5 +25,12 @@ namespace Exam_API.Controllers
             }
             return Ok(user);
         }
+
+        [HttpGet("search")]
+        public ActionResult<List<GetUser>> GetAllUsersWithUsername([FromQuery] string username)
+        {
+            var users = _userService.GetAllUsersWithUsername(username);
+            return Ok(users);
+        }
     }
 }

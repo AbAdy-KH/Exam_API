@@ -9,5 +9,6 @@ namespace Exam_Application.common.interfaces
 {
     public interface IExamResultRepository : IRepository<ExamResult>
     {
+        int NumberOfAttemptsToExam(string examId);
     }
 }

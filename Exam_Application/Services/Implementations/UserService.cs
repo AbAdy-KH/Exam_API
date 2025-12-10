@@ -48,5 +48,20 @@ namespace Exam_Application.Services.Implementations
                 ExamsTaken = examsTaken
             };
         }
+
+        public List<GetUser> GetAllUsersWithUsername(string username)
+        {
+            string currentUserId = GetCurrentUserId();
+            var response = _unitOfWork.User.GetAll(u => u.UserName.Contains(username) && u.Id != currentUserId)
+                .Select(
+                u => new GetUser
+                {
+                    Id = u.Id,
+                    UserName = u.UserName,
+                    FullNmae = u.FullName
+                }).ToList();
+
+            return response;
+        }
     }
 }
