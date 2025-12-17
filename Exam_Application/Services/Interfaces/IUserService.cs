@@ -12,6 +12,6 @@ namespace Exam_Application.Services.Interfaces
     {
         string GetCurrentUserId();
         GetUserProfileDto GetUserProfileInfo(string userId);
-        List<GetUser> GetAllUsersWithUsername(string username);
+        List<GetUser> GetAllUsersWithUsername(string username, int pageNumber);
     }
 }

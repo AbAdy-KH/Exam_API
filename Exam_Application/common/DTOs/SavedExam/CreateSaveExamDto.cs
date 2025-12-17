@@ -8,7 +8,6 @@ namespace Exam_Application.common.DTOs.SavedExam
 {
     public class CreateSaveExamDto
     {
-        public string UserId { get; set; }
         public string ExamId { get; set; }
     }
 }

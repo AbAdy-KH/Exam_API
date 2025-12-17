@@ -79,6 +79,10 @@ namespace Exam_Application.Services.Implementations
         {
             Exam exam = _unitOfWork.Exam.Get(e => e.Id == examId, "Subject, CreatedBy");
 
+            SavedExam savedExam = _unitOfWork.SavedExam.Get(se => se.ExamId == examId && se.UserId == _userService.GetCurrentUserId());
+
+            bool saved = savedExam != null;
+
             GetExamDetailsDto examDto = new GetExamDetailsDto
             {
                 Id = exam.Id,
@@ -86,7 +90,8 @@ namespace Exam_Application.Services.Implementations
                 Subject = exam.Subject,
                 Notes = exam.Notes,
                 UserId = exam.CreatedBy.Id,
-                Username = exam.CreatedBy.UserName
+                Username = exam.CreatedBy.UserName,
+                isSaved = saved
             };
 
             return examDto;

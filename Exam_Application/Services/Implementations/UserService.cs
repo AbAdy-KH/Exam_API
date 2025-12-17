@@ -49,10 +49,13 @@ namespace Exam_Application.Services.Implementations
             };
         }
 
-        public List<GetUser> GetAllUsersWithUsername(string username)
+        public List<GetUser> GetAllUsersWithUsername(string username = "", int pageNumber = 1)
         {
             string currentUserId = GetCurrentUserId();
-            var response = _unitOfWork.User.GetAll(u => u.UserName.Contains(username) && u.Id != currentUserId)
+            var response = _unitOfWork.User
+                .GetAll(u => u.UserName.Contains(username) && u.Id != currentUserId)
+                .Skip((pageNumber - 1) * 10)
+                .Take(10)
                 .Select(
                 u => new GetUser
                 {

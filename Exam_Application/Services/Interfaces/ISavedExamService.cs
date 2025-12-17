@@ -10,6 +10,6 @@ namespace Exam_Application.Services.Interfaces
     public interface ISavedExamService
     {
         void SaveExam(CreateSaveExamDto savedExamDto);
-        void UnsaveExam(string savedExamId);
+        void UnsaveExam(string examId);
     }
 }

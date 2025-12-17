@@ -27,9 +27,9 @@ namespace Exam_API.Controllers
         }
 
         [HttpGet("search")]
-        public ActionResult<List<GetUser>> GetAllUsersWithUsername([FromQuery] string username)
+        public ActionResult<List<GetUser>> GetAllUsersWithUsername([FromQuery] string username = "", [FromQuery] int pageNumber = 1)
         {
-            var users = _userService.GetAllUsersWithUsername(username);
+            var users = _userService.GetAllUsersWithUsername(username, pageNumber);
             return Ok(users);
         }
     }

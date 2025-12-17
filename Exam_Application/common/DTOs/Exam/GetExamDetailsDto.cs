@@ -16,5 +16,6 @@ namespace Exam_Application.common.DTOs.Exam
         //public ApplicationUser CreatedBy { get; set; }
         public string UserId { get; set; }
         public string Username { get; set; }
+        public bool isSaved { get; set; }
     }
 }
