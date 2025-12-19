@@ -17,7 +17,7 @@ namespace Exam_API.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost("save")]
         public IActionResult SaveExam([FromBody] CreateSaveExamDto saveExamDto)
         {
             _savedExamService.SaveExam(saveExamDto);
@@ -29,6 +29,13 @@ namespace Exam_API.Controllers
         {
             _savedExamService.UnsaveExam(examId);
             return Ok();
+        }
+
+        [HttpGet]
+        public IActionResult GetSavedExamsForUser([FromQuery] string userId, [FromQuery] int pageNumber = 1, [FromQuery] string filter = "", [FromQuery] string subjectFilter = "-1")
+        {
+            var savedExams = _savedExamService.GetSavedExamsForUser(userId, pageNumber, filter, subjectFilter);
+            return Ok(savedExams);
         }
     }
 }

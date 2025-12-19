@@ -1,4 +1,5 @@
-﻿using Exam_Application.common.DTOs.SavedExam;
+﻿using Exam_Application.common.DTOs.Exam;
+using Exam_Application.common.DTOs.SavedExam;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace Exam_Application.Services.Interfaces
     {
         void SaveExam(CreateSaveExamDto savedExamDto);
         void UnsaveExam(string examId);
+        List<GetExamInfoDto> GetSavedExamsForUser(string userId, int pageNumber, string filter, string subjectFilter);
     }
 }
