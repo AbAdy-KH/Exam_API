@@ -47,15 +47,15 @@ builder.Services.AddScoped<IChatBotService, ChatBotService>();
 builder.Services.AddScoped<ISavedExamService, SavedExamService>();
 
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowFrontend", policy =>
-    {
-        policy.WithOrigins("http://127.0.0.1:5500") // your frontend address
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-});
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowFrontend", policy =>
+//    {
+//        policy.WithOrigins("http://127.0.0.1:5500") // your frontend address
+//              .AllowAnyHeader()
+//              .AllowAnyMethod();
+//    });
+//});
 
 builder.Services.AddCors(options =>
 {

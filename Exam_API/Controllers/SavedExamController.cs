@@ -1,5 +1,6 @@
 ﻿using Exam_Application.common.DTOs.SavedExam;
 using Exam_Application.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +8,7 @@ namespace Exam_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class SavedExamController : ControllerBase
     {
         private readonly ISavedExamService _savedExamService;

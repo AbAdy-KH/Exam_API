@@ -2,12 +2,13 @@
 using Exam_Application.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Exam_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Microsoft.AspNetCore.Authorization.Authorize]
+    [Authorize]
     public class ExamResultController : ControllerBase
     {
         private readonly IExamResultService _examResultService;
