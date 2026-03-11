@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Exam_Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class addCreatedAtColumnToExamAndExamResult : Migration
+    public partial class initialize : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -231,6 +231,7 @@ namespace Exam_Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    QuestionNumber = table.Column<int>(type: "int", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ExamId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -246,10 +247,36 @@ namespace Exam_Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SavedExams",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ExamId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SavedExams", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SavedExams_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SavedExams_Exams_ExamId",
+                        column: x => x.ExamId,
+                        principalTable: "Exams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Options",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    OptionNumber = table.Column<int>(type: "int", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsCorrect = table.Column<bool>(type: "bit", nullable: false),
                     QuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
@@ -317,32 +344,32 @@ namespace Exam_Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Questions",
-                columns: new[] { "Id", "ExamId", "Text" },
+                columns: new[] { "Id", "ExamId", "QuestionNumber", "Text" },
                 values: new object[,]
                 {
-                    { "1", "1", "What is 2 + 2?" },
-                    { "2", "1", "What is the capital of France?" },
-                    { "3", "2", "What is a class in OOP?" },
-                    { "4", "3", "What is an IP address?" }
+                    { "1", "1", 0, "What is 2 + 2?" },
+                    { "2", "1", 0, "What is the capital of France?" },
+                    { "3", "2", 0, "What is a class in OOP?" },
+                    { "4", "3", 0, "What is an IP address?" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Options",
-                columns: new[] { "Id", "IsCorrect", "QuestionId", "Text" },
+                columns: new[] { "Id", "IsCorrect", "OptionNumber", "QuestionId", "Text" },
                 values: new object[,]
                 {
-                    { "1", false, "1", "3" },
-                    { "10", true, "4", "A unique identifier for a device on a network" },
-                    { "11", false, "4", "A type of protocol" },
-                    { "12", false, "4", "A network device" },
-                    { "2", true, "1", "4" },
-                    { "3", false, "1", "5" },
-                    { "4", false, "2", "London" },
-                    { "5", false, "2", "Berlin" },
-                    { "6", true, "2", "Paris" },
-                    { "7", true, "3", "A blueprint for creating objects" },
-                    { "8", false, "3", "A type of function" },
-                    { "9", false, "3", "A variable" }
+                    { "1", false, 0, "1", "3" },
+                    { "10", true, 0, "4", "A unique identifier for a device on a network" },
+                    { "11", false, 0, "4", "A type of protocol" },
+                    { "12", false, 0, "4", "A network device" },
+                    { "2", true, 0, "1", "4" },
+                    { "3", false, 0, "1", "5" },
+                    { "4", false, 0, "2", "London" },
+                    { "5", false, 0, "2", "Berlin" },
+                    { "6", true, 0, "2", "Paris" },
+                    { "7", true, 0, "3", "A blueprint for creating objects" },
+                    { "8", false, 0, "3", "A type of function" },
+                    { "9", false, 0, "3", "A variable" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -415,6 +442,16 @@ namespace Exam_Infrastructure.Migrations
                 column: "ExamId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SavedExams_ExamId",
+                table: "SavedExams",
+                column: "ExamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SavedExams_UserId",
+                table: "SavedExams",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SelectedAnswers_ExamResultId",
                 table: "SelectedAnswers",
                 column: "ExamResultId");
@@ -442,6 +479,9 @@ namespace Exam_Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "SavedExams");
 
             migrationBuilder.DropTable(
                 name: "SelectedAnswers");

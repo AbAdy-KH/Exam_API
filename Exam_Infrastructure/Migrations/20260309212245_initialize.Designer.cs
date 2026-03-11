@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Exam_Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251209195311_addCreatedAtColumnToExamAndExamResult")]
-    partial class addCreatedAtColumnToExamAndExamResult
+    [Migration("20260309212245_initialize")]
+    partial class initialize
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -210,6 +210,9 @@ namespace Exam_Infrastructure.Migrations
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
+                    b.Property<int>("OptionNumber")
+                        .HasColumnType("int");
+
                     b.Property<string>("QuestionId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -229,6 +232,7 @@ namespace Exam_Infrastructure.Migrations
                         {
                             Id = "1",
                             IsCorrect = false,
+                            OptionNumber = 0,
                             QuestionId = "1",
                             Text = "3"
                         },
@@ -236,6 +240,7 @@ namespace Exam_Infrastructure.Migrations
                         {
                             Id = "2",
                             IsCorrect = true,
+                            OptionNumber = 0,
                             QuestionId = "1",
                             Text = "4"
                         },
@@ -243,6 +248,7 @@ namespace Exam_Infrastructure.Migrations
                         {
                             Id = "3",
                             IsCorrect = false,
+                            OptionNumber = 0,
                             QuestionId = "1",
                             Text = "5"
                         },
@@ -250,6 +256,7 @@ namespace Exam_Infrastructure.Migrations
                         {
                             Id = "4",
                             IsCorrect = false,
+                            OptionNumber = 0,
                             QuestionId = "2",
                             Text = "London"
                         },
@@ -257,6 +264,7 @@ namespace Exam_Infrastructure.Migrations
                         {
                             Id = "5",
                             IsCorrect = false,
+                            OptionNumber = 0,
                             QuestionId = "2",
                             Text = "Berlin"
                         },
@@ -264,6 +272,7 @@ namespace Exam_Infrastructure.Migrations
                         {
                             Id = "6",
                             IsCorrect = true,
+                            OptionNumber = 0,
                             QuestionId = "2",
                             Text = "Paris"
                         },
@@ -271,6 +280,7 @@ namespace Exam_Infrastructure.Migrations
                         {
                             Id = "7",
                             IsCorrect = true,
+                            OptionNumber = 0,
                             QuestionId = "3",
                             Text = "A blueprint for creating objects"
                         },
@@ -278,6 +288,7 @@ namespace Exam_Infrastructure.Migrations
                         {
                             Id = "8",
                             IsCorrect = false,
+                            OptionNumber = 0,
                             QuestionId = "3",
                             Text = "A type of function"
                         },
@@ -285,6 +296,7 @@ namespace Exam_Infrastructure.Migrations
                         {
                             Id = "9",
                             IsCorrect = false,
+                            OptionNumber = 0,
                             QuestionId = "3",
                             Text = "A variable"
                         },
@@ -292,6 +304,7 @@ namespace Exam_Infrastructure.Migrations
                         {
                             Id = "10",
                             IsCorrect = true,
+                            OptionNumber = 0,
                             QuestionId = "4",
                             Text = "A unique identifier for a device on a network"
                         },
@@ -299,6 +312,7 @@ namespace Exam_Infrastructure.Migrations
                         {
                             Id = "11",
                             IsCorrect = false,
+                            OptionNumber = 0,
                             QuestionId = "4",
                             Text = "A type of protocol"
                         },
@@ -306,6 +320,7 @@ namespace Exam_Infrastructure.Migrations
                         {
                             Id = "12",
                             IsCorrect = false,
+                            OptionNumber = 0,
                             QuestionId = "4",
                             Text = "A network device"
                         });
@@ -319,6 +334,9 @@ namespace Exam_Infrastructure.Migrations
                     b.Property<string>("ExamId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("QuestionNumber")
+                        .HasColumnType("int");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -335,26 +353,52 @@ namespace Exam_Infrastructure.Migrations
                         {
                             Id = "1",
                             ExamId = "1",
+                            QuestionNumber = 0,
                             Text = "What is 2 + 2?"
                         },
                         new
                         {
                             Id = "2",
                             ExamId = "1",
+                            QuestionNumber = 0,
                             Text = "What is the capital of France?"
                         },
                         new
                         {
                             Id = "3",
                             ExamId = "2",
+                            QuestionNumber = 0,
                             Text = "What is a class in OOP?"
                         },
                         new
                         {
                             Id = "4",
                             ExamId = "3",
+                            QuestionNumber = 0,
                             Text = "What is an IP address?"
                         });
+                });
+
+            modelBuilder.Entity("Exam_Domain.Entities.SavedExam", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ExamId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExamId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SavedExams");
                 });
 
             modelBuilder.Entity("Exam_Domain.Entities.SelectedAnswer", b =>
@@ -601,6 +645,25 @@ namespace Exam_Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Exam");
+                });
+
+            modelBuilder.Entity("Exam_Domain.Entities.SavedExam", b =>
+                {
+                    b.HasOne("Exam_Domain.Entities.Exam", "Exam")
+                        .WithMany()
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Exam_Domain.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exam");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Exam_Domain.Entities.SelectedAnswer", b =>

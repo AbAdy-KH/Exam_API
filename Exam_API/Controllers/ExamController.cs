@@ -11,7 +11,7 @@ namespace Exam_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ExamController : ControllerBase
     {
         private readonly IExamService _examService;

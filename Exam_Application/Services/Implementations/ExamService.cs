@@ -194,7 +194,7 @@ namespace Exam_Application.Services.Implementations
                         if (string.IsNullOrEmpty(optionDto.Id))
                         {
                             var newOption = _mapper.Map<Option>(optionDto);
-                            optionDto.Id = Guid.NewGuid().ToString();
+                            newOption.Id = Guid.NewGuid().ToString();
 
                             existingQuestion.Options.Add(newOption);
                         }
