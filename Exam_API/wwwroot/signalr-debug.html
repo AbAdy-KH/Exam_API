@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>SignalR Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js"></script>
+</head>
+<body>
+
+    <div> message </div>
+    <input type="text" id="message-input" />
+    <button onclick="sendMessage()">Send</button>
+
+    <div id="messages"></div>
+
+    <script>
+        let messages = [];
+        let connection = null;
+        let token = null;
+
+        async function login() {
+            const res = await fetch("/api/Auth/login", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: "abady", password: "111105"
+                })
+            });
+
+            const data = await res.json();
+
+            return data.data; // حسب شكل API عندك
+        }
+
+        async function init() {
+            token = await login();
+
+            console.log(token);
+
+            connection = new signalR.HubConnectionBuilder()
+                .withUrl("/chatHub", {
+                    accessTokenFactory: () => token
+                })
+                .build();
+
+            connection.on("ReceiveMessage", (message, senderId) => {
+
+                messages.push(message);
+
+                const messagesContainer = document.getElementById("messages");
+
+                messagesContainer.innerHTML = messages.map(m => {
+                    return `<div>${m}</div>`;
+                }).join("");
+            });
+
+            await connection.start()
+                .then(() => console.log("Connected"))
+                .catch(err => console.error(err));
+        }
+
+        init();
+
+
+        function sendMessage() {
+            const message = document.getElementById("message-input").value;
+            connection.invoke("sendMessage", "1", message);
+        }
+
+
+
+    </script>
+
+    <!--<script>
+
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/userHub")
+            .build();
+
+        connection.on("updateViews", (totalViews) => {
+            let div = document.getElementById("totalViews");
+
+            div.innerHTML = totalViews.toString();
+        });
+
+        function success() {
+            console.log("Connected");
+            connection.send("OnPageLoad");
+        }
+
+        connection.start()
+            .then(() => { success() })
+            .catch(err => console.error(err));
+
+    </script>-->
+    <!--<script>
+
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub")
+            .build();
+
+        connection.on("getNewMessage", (message) => {
+            let div = document.getElementById("message");
+
+            div.innerHTML = message.toString();
+        });
+
+        function success() {
+            console.log("Connected");
+            connection.send("SendMessage", "hhhh");
+        }
+
+        connection.start()
+            .then(() => { success() })
+            .catch(err => console.error(err));
+
+    </script>-->
+
+</body>
+</html>

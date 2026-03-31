@@ -18,6 +18,8 @@ namespace Exam_Infrastructure
         public DbSet<ExamResult> ExamResults { get; set; }
         public DbSet<SelectedAnswer> SelectedAnswers { get; set; }
         public DbSet<SavedExam> SavedExams { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Friend> Friends { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -41,6 +43,30 @@ namespace Exam_Infrastructure
                 .WithMany()
                 .HasForeignKey(er => er.CreatedById)
                 .OnDelete(DeleteBehavior.Restrict); // <-- يمنع double cascade
+
+            builder.Entity<Message>()
+                .HasOne(m => m.Sender)
+                .WithMany()
+                .HasForeignKey(m => m.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Message>()
+                .HasOne(m => m.Receiver)
+                .WithMany()
+                .HasForeignKey(m => m.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Friend>()
+                .HasOne(f => f.User1)
+                .WithMany()
+                .HasForeignKey(f => f.User1Id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Friend>()
+                .HasOne(f => f.User2)
+                .WithMany()
+                .HasForeignKey(f => f.User2Id)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // 🔹 Seed Data (تقدر تحتفظ به أو تعدله كما تحب)
             builder.Entity<ApplicationUser>().HasData(

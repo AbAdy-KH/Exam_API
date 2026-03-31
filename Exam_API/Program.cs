@@ -1,4 +1,5 @@
 using Azure.Core;
+using Exam_API.Hubs;
 using Exam_Application.common.interfaces;
 using Exam_Application.Contracts;
 using Exam_Application.Services.Implementations;
@@ -34,6 +35,8 @@ builder.Services.AddScoped<IExamResultRepository, ExamResultRepository>();
 builder.Services.AddScoped<ISelectedAnswerRepository, SelectedAnswerRepository>();
 builder.Services.AddScoped<IUserReapository, UserRepository>();
 builder.Services.AddScoped<ISavedExamRepository, SavedExamRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<IFriendRepository, FriendRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IExamService, ExamService>();
@@ -45,6 +48,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IChatBotService, ChatBotService>();
 builder.Services.AddScoped<ISavedExamService, SavedExamService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<IFriendService, FriendService>();
 
 
 //builder.Services.AddCors(options =>
@@ -100,6 +105,24 @@ builder.Services.AddAuthentication(options =>
             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
         )
     };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+
+            var path = context.HttpContext.Request.Path;
+
+            if (!string.IsNullOrEmpty(accessToken) &&
+                path.StartsWithSegments("/chatHub"))
+            {
+                context.Token = accessToken;
+            }
+
+            return Task.CompletedTask;
+        }
+    };
 });
 
 builder.Services.AddSingleton<ChatClient>(serviceProvider =>
@@ -117,6 +140,8 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -147,5 +172,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
+app.MapHub<ChatHub>("/chatHub");
+
+app.UseStaticFiles();
 
 app.Run();

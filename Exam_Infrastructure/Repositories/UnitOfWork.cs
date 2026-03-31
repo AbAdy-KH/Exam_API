@@ -18,6 +18,8 @@ namespace Exam_Infrastructure.Repositories
         public ISelectedAnswerRepository SelectedAnswer { get; private set; }
         public IUserReapository User { get; private set; }
         public ISavedExamRepository SavedExam { get; private set; }
+        public IMessageRepository Message { get; private set; }
+        public IFriendRepository Friend { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -30,11 +32,20 @@ namespace Exam_Infrastructure.Repositories
             SelectedAnswer = new SelectedAnswerRepository(_db);
             User = new UserRepository(_db);
             SavedExam = new SavedExamRepository(_db);
+            Message = new MessageRepository(_db);
+            Friend = new FriendRepository(_db);
         }
 
         public void Save()
         {
-            _db.SaveChanges();
+            try
+            {
+                _db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

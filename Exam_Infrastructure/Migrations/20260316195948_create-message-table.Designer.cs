@@ -4,6 +4,7 @@ using Exam_Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Exam_Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260316195948_create-message-table")]
+    partial class createmessagetable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -199,31 +202,6 @@ namespace Exam_Infrastructure.Migrations
                     b.ToTable("ExamResults");
                 });
 
-            modelBuilder.Entity("Exam_Domain.Entities.Friend", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("User1Id")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("User2Id")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("User1Id");
-
-                    b.HasIndex("User2Id");
-
-                    b.ToTable("Friends");
-                });
-
             modelBuilder.Entity("Exam_Domain.Entities.Message", b =>
                 {
                     b.Property<string>("Id")
@@ -232,9 +210,6 @@ namespace Exam_Infrastructure.Migrations
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("ReceiverId")
                         .IsRequired()
@@ -250,7 +225,7 @@ namespace Exam_Infrastructure.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Message");
                 });
 
             modelBuilder.Entity("Exam_Domain.Entities.Option", b =>
@@ -674,25 +649,6 @@ namespace Exam_Infrastructure.Migrations
                     b.Navigation("CreatedBy");
 
                     b.Navigation("Exam");
-                });
-
-            modelBuilder.Entity("Exam_Domain.Entities.Friend", b =>
-                {
-                    b.HasOne("Exam_Domain.Entities.ApplicationUser", "User1")
-                        .WithMany()
-                        .HasForeignKey("User1Id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Exam_Domain.Entities.ApplicationUser", "User2")
-                        .WithMany()
-                        .HasForeignKey("User2Id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User1");
-
-                    b.Navigation("User2");
                 });
 
             modelBuilder.Entity("Exam_Domain.Entities.Message", b =>
