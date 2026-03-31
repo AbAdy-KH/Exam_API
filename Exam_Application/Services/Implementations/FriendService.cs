@@ -19,14 +19,25 @@ namespace Exam_Application.Services.Implementations
             _unitOfWork = unitOfWork;
         }
 
+        public bool IsUser1FollowingUser2(string user1Id, string user2Id)
+        {
+            return _unitOfWork.Friend.Get(f => f.User1Id == user1Id && f.User2Id == user2Id) != null;
+        }
+
         public bool AddFriend(AddFriendDto addFriendDto)
         {
             try
             {
                 if(addFriendDto.User1Id == addFriendDto.User2Id)
                 {
-                    return false; // Cannot add oneself as a friend
+                    return false;
                 }
+
+                if(IsUser1FollowingUser2(addFriendDto.User1Id, addFriendDto.User2Id))
+                {
+                    return false;
+                }
+
 
                 Friend friendEntity = new Friend
                 {
@@ -36,7 +47,17 @@ namespace Exam_Application.Services.Implementations
                     CreatedAt = DateTime.UtcNow
                 };
 
+                //Message messageEntity = new Message
+                //{
+                //    Id = Guid.NewGuid().ToString(),
+                //    SenderId = addFriendDto.User1Id,
+                //    ReceiverId = addFriendDto.User2Id,
+                //    Content = "Hi",
+                //    CreatedDate = DateTime.UtcNow
+                //};
+
                 _unitOfWork.Friend.Add(friendEntity);
+                //_unitOfWork.Message.Add(messageEntity);
                 _unitOfWork.Save();
 
                 return true;
