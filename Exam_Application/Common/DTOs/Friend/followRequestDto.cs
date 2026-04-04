@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Exam_Application.Common.DTOs.Friend
 {
-    public class AddFriendDto
+    public class followRequestDto
     {
-        public string User1Id { get; set; }
-
-        public string User2Id { get; set; }
+        public string followedUserId { get; set; }
     }
 }

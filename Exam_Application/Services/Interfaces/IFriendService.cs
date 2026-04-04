@@ -9,6 +9,7 @@ namespace Exam_Application.Services.Interfaces
 {
     public interface IFriendService
     {
-        bool AddFriend(AddFriendDto addFriendDto);
+        bool AddFriend(followRequestDto followRequest);
+        bool RemoveFriend(string userId);
     }
 }

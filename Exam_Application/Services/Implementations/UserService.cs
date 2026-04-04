@@ -36,8 +36,14 @@ namespace Exam_Application.Services.Implementations
             {
                 return null;
             }
+
+            string currentUserId = GetCurrentUserId();
+
             var examsCreated = _unitOfWork.Exam.GetAll(e => e.CreatedById == userId).Count();
             var examsTaken = _unitOfWork.ExamResult.GetAll(er=> er.CreatedById == userId).Count();
+            var isFollowing = _unitOfWork.Friend
+                .Get(f => (f.User1Id == currentUserId && f.User2Id == userId)) != null;
+
             return new GetUserProfileDto
             {
                 Id = user.Id,
@@ -45,7 +51,8 @@ namespace Exam_Application.Services.Implementations
                 FullName = user.FullName,
                 Email = user.Email,
                 ExamsCreated = examsCreated,
-                ExamsTaken = examsTaken
+                ExamsTaken = examsTaken,
+                isFollowing = isFollowing
             };
         }
 

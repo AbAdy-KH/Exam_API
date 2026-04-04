@@ -14,5 +14,6 @@ namespace Exam_Application.common.DTOs.UserAndAuth
         public string Email { get; set; }
         public int ExamsTaken { get; set; }
         public int ExamsCreated { get; set; }
+        public bool isFollowing { get; set; }
     }
 }

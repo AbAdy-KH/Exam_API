@@ -17,11 +17,18 @@ namespace Exam_API.Controllers
             _friendService = friendService;
         }
 
-        [HttpPost]
-        public ActionResult<bool> Follow(AddFriendDto addFriendDto)
+        [HttpPost("Follow")]
+        public ActionResult<bool> Follow(followRequestDto followRequest)
         {
-            bool res = _friendService.AddFriend(addFriendDto);
+            bool res = _friendService.AddFriend(followRequest);
 
+            return res ? Ok(res) : BadRequest(res);
+        }
+
+        [HttpDelete("Unfollow/{userId}")]
+        public ActionResult<bool> Unfollow(string userId)
+        {
+            bool res = _friendService.RemoveFriend(userId);
             return res ? Ok(res) : BadRequest(res);
         }
     }
