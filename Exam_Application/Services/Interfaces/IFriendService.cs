@@ -1,4 +1,5 @@
-﻿using Exam_Application.Common.DTOs.Friend;
+﻿using Exam_Application.common.DTOs.UserAndAuth;
+using Exam_Application.Common.DTOs.Friend;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace Exam_Application.Services.Interfaces
     {
         bool AddFriend(followRequestDto followRequest);
         bool RemoveFriend(string userId);
+        List<GetUser> GetAllFriends();
     }
 }

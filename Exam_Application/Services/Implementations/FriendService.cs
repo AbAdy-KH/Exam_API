@@ -1,4 +1,5 @@
-﻿using Exam_Application.common.interfaces;
+﻿using Exam_Application.common.DTOs.UserAndAuth;
+using Exam_Application.common.interfaces;
 using Exam_Application.Common.DTOs.Friend;
 using Exam_Application.Services.Interfaces;
 using Exam_Domain.Entities;
@@ -101,6 +102,35 @@ namespace Exam_Application.Services.Implementations
             {
                 Console.WriteLine(ex.Message);
                 return false;
+            }
+        }
+
+        public List<GetUser> GetAllFriends()
+        {
+            try
+            {
+                string currentUserId = _httpContextAccessor
+                         .HttpContext.User
+                         .Claims
+                         .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?
+                         .Value!;
+
+                List<GetUser> friends = _unitOfWork.Friend
+                    .GetAll(f => f.User1Id == currentUserId, "User2")
+                    .Select(f => new GetUser
+                    {
+                        Id = f.User2.Id,
+                        UserName = f.User2.UserName,
+                        FullNmae = f.User2.FullName
+                    }).ToList();
+
+                return friends;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
             }
         }
     }

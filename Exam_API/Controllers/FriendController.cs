@@ -1,4 +1,5 @@
-﻿using Exam_Application.Common.DTOs.Friend;
+﻿using Exam_Application.common.DTOs.UserAndAuth;
+using Exam_Application.Common.DTOs.Friend;
 using Exam_Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,13 @@ namespace Exam_API.Controllers
         public FriendController(IFriendService friendService)
         {
             _friendService = friendService;
+        }
+
+        [HttpGet("All")]
+        public ActionResult<List<GetUser>> GetAllFriends()
+        {
+            var res = _friendService.GetAllFriends();
+            return res != null ? Ok(res) : BadRequest(res);
         }
 
         [HttpPost("Follow")]

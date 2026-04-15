@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using OpenAI.Chat;
 using System;
 using System.Text;
@@ -64,11 +65,23 @@ builder.Services.AddScoped<IFriendService, FriendService>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", p =>
-        p.AllowAnyOrigin()
-         .AllowAnyHeader()
-         .AllowAnyMethod());
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5173") // React app
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials(); // VERY IMPORTANT
+    });
 });
+
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowAll", p =>
+//        p.AllowAnyOrigin()
+//         .AllowAnyHeader()
+//         .AllowAnyMethod());
+//});
 
 // Register Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -143,6 +156,39 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSignalR();
 
+builder.Services.AddSwaggerGen(opt =>
+{
+    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyChatAPI", Version = "v1" });
+
+    // Define the Security Scheme
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter token (Example: '12345abcdef')",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "bearer"
+    });
+
+    // Make sure Swagger uses that scheme globally
+    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+});
+
+
 var app = builder.Build();
 
 
@@ -150,14 +196,8 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 
-//// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.MapOpenApi();
-//}
-
 app.UseCors("AllowFrontend");
-app.UseCors("AllowAll");
+//app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 

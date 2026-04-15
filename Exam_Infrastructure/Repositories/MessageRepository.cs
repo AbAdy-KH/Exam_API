@@ -24,19 +24,22 @@ namespace Exam_Infrastructure.Repositories
         public List<ChatDto> GetAllChats(string userId)
         {
             List<ChatDto> chats = _db.Messages
+                .Where(m => m.SenderId == userId || m.ReceiverId == userId)
                 .Include(m => m.Sender)
                 .Include(m => m.Receiver)
-                .GroupBy(m => (m.SenderId == userId) ? m.ReceiverId : m.SenderId)
+                .GroupBy(m => (m.SenderId == userId) ? m.ReceiverId : (m.ReceiverId == userId ? m.SenderId : null))
                 .Select(g => new ChatDto
                 { 
                     UserId = g.Key,
                     UserName = g.Select(x => 
-                        (x.SenderId == userId ? x.Receiver : x.Sender).UserName
+                        (x.SenderId == userId ? x.Receiver : (x.ReceiverId == userId ? x.Sender : null)).UserName
                     )
                     .FirstOrDefault(),
                     LastMessage = g.Max(x => x.CreatedDate)
                 })
                 .ToList();
+
+
 
             return chats;
         }

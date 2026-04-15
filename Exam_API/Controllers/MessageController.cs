@@ -15,17 +15,17 @@ namespace Exam_API.Controllers
         }
 
         [HttpGet("chats")]
-        public ActionResult<List<ChatDto>> GetAllChats(string userId)
+        public ActionResult<List<ChatDto>> GetAllChats(string filter = "")
         {
-            List<ChatDto> chats = _messageService.GetAllChatsForUser(userId);
+            List<ChatDto> chats = _messageService.GetAllChats(filter);
 
             return Ok(chats);
         }
 
         [HttpGet("chatMessages")]
-        public ActionResult<List<MessageDto>> GetChatMessages(string user1, string user2)
+        public ActionResult<List<MessageDto>> GetChatMessages(string userId)
         {
-            List<MessageDto> messages = _messageService.GetChatMessages(user1, user2);
+            List<MessageDto> messages = _messageService.GetChatMessages(userId);
 
             return Ok(messages);
         }

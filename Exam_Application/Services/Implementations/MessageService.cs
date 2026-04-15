@@ -51,19 +51,41 @@ namespace Exam_Application.Services.Implementations
             }
         }
 
-        public List<ChatDto> GetAllChatsForUser(string userId)
+        public List<ChatDto> GetAllChats(string filter = "")
         {
-            List<ChatDto> chats = _unitOfWork.Message.GetAllChats(userId);
+            string userId = _httpContextAccessor
+                .HttpContext
+                .User
+                .FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+            List<ChatDto> chats = _unitOfWork.Message.GetAll(m =>
+                ((m.SenderId == userId && m.Receiver.UserName.Contains(filter))
+                    || (m.ReceiverId == userId && m.Sender.UserName.Contains(filter))
+                )
+            , "Sender, Receiver")
+            .GroupBy(m => m.SenderId == userId ? m.ReceiverId : m.SenderId)
+            .Select(g => new ChatDto
+            {
+                UserId = g.Key,
+                UserName = g.Select(m => (m.SenderId == userId ? m.Receiver : m.Sender).UserName).FirstOrDefault(),
+                LastMessage = g.Max(m => m.CreatedDate)
+            }).ToList();
+
 
             return chats;
         }
 
-        public List<MessageDto> GetChatMessages(string user1, string user2)
+        public List<MessageDto> GetChatMessages(string userId)
         {
+            string currentUserId = _httpContextAccessor
+                .HttpContext
+                .User
+                .FindFirstValue(ClaimTypes.NameIdentifier)!;
+
             IEnumerable<Message> messages = _unitOfWork.Message
                 .GetAll(m =>
-                    (m.SenderId == user1 && m.ReceiverId == user2)
-                    || (m.SenderId == user2 && m.ReceiverId == user1)
+                    (m.SenderId == currentUserId && m.ReceiverId == userId)
+                    || (m.SenderId == userId && m.ReceiverId == currentUserId)
                 ).OrderBy(m => m.CreatedDate);
 
             List<MessageDto> messagesDto = 

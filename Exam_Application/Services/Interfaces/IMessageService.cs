@@ -10,7 +10,7 @@ namespace Exam_Application.Services.Interfaces
     public interface IMessageService
     {
         bool SaveMessage(string ReceiverId,  string Message);
-        List<ChatDto> GetAllChatsForUser(string userId);
-        List<MessageDto> GetChatMessages(string user1, string user2);
+        List<ChatDto> GetAllChats(string filter);
+        List<MessageDto> GetChatMessages(string userId);
     }
 }
