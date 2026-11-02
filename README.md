@@ -8,3 +8,5 @@ This repository contains the back-end source code for the **Bartihan** applicati
 - ASP.NET Core
 - Clean Architecture
 - Entity Framework Core
+- JWT Authentication
+- Web Socket using SignalR for real time chatting
